@@ -76,9 +76,7 @@ class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
                       children: [
                         const Text('ثبت'),
                         if (state.isSubmitting) ...[
-                          const SizedBox(
-                            width: 10,
-                          ),
+                          const SizedBox(width: 10),
                           SizedBox(
                             width: 15,
                             height: 15,
