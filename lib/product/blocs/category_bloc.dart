@@ -119,6 +119,7 @@ class CategoryCubit extends Cubit<CategoryState> {
         state.copyWith(isSubmitting: false),
       );
     }
+
     return false;
   }
 }
