@@ -50,116 +50,78 @@ class ProductScreen extends StatelessWidget {
           ),
         ),
       ),
-      child: Container(
-        color: Colors.grey[100],
-        constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width,
-          minHeight: MediaQuery.of(context).size.height,
+      child: BlocProvider(
+        create: (context) => CategoryCubit(
+          CategoryState(),
         ),
-        child: Column(
-          children: [
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(
-                    width: 24,
-                  ),
-                  Text(
-                    'محصولات',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      await AuthRepository.login(phone: "9944432552", password: "password");
-                      if (context.mounted) Navigator.of(context).pushNamed('/');
-                    },
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey[400],
-                      size: 24,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: BlocProvider(
-                create: (context) => CategoryCubit(
-                  CategoryState(),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey[300]!,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      child: const CategoryListWidget(),
-                    ),
-                    const ProductListWidget(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: ProductListWidget(),
       ),
     );
   }
 }
 
 class ProductListWidget extends StatelessWidget {
-  const ProductListWidget({
-    super.key,
-  });
+  Widget headList(innerBoxIsScrolled) {
+    return SliverAppBar(
+      toolbarHeight: 56.0,
+      pinned: true,
+      floating: true,
+      automaticallyImplyLeading: false,
+      // forceElevated: innerBoxIsScrolled,
+      shape: const Border(bottom: BorderSide(color: Colors.black12)),
+      elevation: 0,
+      backgroundColor: Colors.white,
+      actions: [
+        InkWell(
+          onTap: () async {
+            await AuthRepository.login(phone: "9944432552", password: "password");
+            // Navigator.of(context).pushNamed('/');
+          },
+          child: Icon(
+            Icons.search,
+            color: Colors.grey[400],
+            size: 24,
+          ),
+        ),
+      ],
+      // automaticallyImplyLeading: false,
+      title: const Text(
+        "محصولات",
+        style: TextStyle(color: Colors.black),
+      ),
+      bottom: const CategoryListWidget(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CategoryCubit, CategoryState>(
-      buildWhen: (previous, current) => previous.selectedCategory != current.selectedCategory || previous.categories != current.categories,
-      builder: (context, state) {
-        final products = state.selectedCategoryProducts;
-        if (products.isEmpty) {
-          return const Center(
-            child: Text("محصولی ایجاد نشده:)"),
-          );
-        } else {
-          return Container(
-            height: double.maxFinite,
-            child: ListView(
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[headList(innerBoxIsScrolled)];
+      },
+      body: BlocBuilder<CategoryCubit, CategoryState>(
+        buildWhen: (previous, current) => previous.selectedCategory != current.selectedCategory || previous.categories != current.categories,
+        builder: (context, state) {
+          final products = state.selectedCategoryProducts;
+          if (products.isEmpty) {
+            return const Center(
+              child: Text("محصولی ایجاد نشده:)"),
+            );
+          } else {
+            return ListView(
               shrinkWrap: true,
               children: [
                 // map products with space
                 ...products.map(
-                  (e) => Column(
-                    children: [
-                      ProductItemWidget(
-                        product: e,
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                  (e) => ProductItemWidget(
+                    product: e,
                   ),
                 ),
               ],
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
   }
 }

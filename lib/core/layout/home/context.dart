@@ -14,10 +14,13 @@ class HomeContextLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: child,
-      appBar: appBar,
-      floatingActionButton: floatingActionButton,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        body: child,
+        appBar: appBar,
+        floatingActionButton: floatingActionButton,
+      ),
     );
   }
 }

@@ -6,13 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-class CategoryListWidget extends StatelessWidget {
+class CategoryListWidget extends StatelessWidget implements PreferredSizeWidget{
   const CategoryListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: double.infinity,
+      alignment: Alignment.center,
+      height: 46,
       child: Row(
         children: [
           Expanded(
@@ -162,6 +164,9 @@ class CategoryListWidget extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(46);
 }
 
 class CreateCategoryDialog extends StatefulWidget {
