@@ -59,7 +59,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     );
   }
 
-  void createCategory(Map<String, dynamic>? value) {
-    CategoryRepository.createCategory(value).then((value) => getCategories());
+  Future<bool> createCategory(Map<String, dynamic>? value) async {
+    return CategoryRepository.createCategory(value).then((value) => getCategories()).then((value) => true).catchError((e) => false);
   }
 }

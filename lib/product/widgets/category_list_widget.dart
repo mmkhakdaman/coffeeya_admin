@@ -1,5 +1,6 @@
+import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
+import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
 import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
-import 'package:coffeeya_admin/product/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -22,10 +23,15 @@ class CategoryListWidget extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      showDialog(
+                      showGeneralDialog(
                         context: context,
-                        useSafeArea: true,
-                        builder: (dialogContext) => BlocProvider.value(
+                        transitionBuilder: (context, a1, a2, widget) {
+                          return Opacity(
+                            opacity: a1.value,
+                            child: widget,
+                          );
+                        },
+                        pageBuilder: (dialogContext, animation1, animation2) => BlocProvider.value(
                           value: BlocProvider.of<CategoryCubit>(context),
                           child: const CreateCategoryDialog(),
                         ),
@@ -81,7 +87,7 @@ class CategoryListWidget extends StatelessWidget {
                                 vertical: 5,
                               ),
                               decoration: BoxDecoration(
-                                color: state.selectedCategory == 0 ? Colors.grey[800] : Colors.transparent,
+                                color: state.selectedCategory == 0 ? Colors.grey[900] : Colors.transparent,
                                 borderRadius: BorderRadius.circular(100),
                               ),
                               child: Text(
@@ -116,7 +122,7 @@ class CategoryListWidget extends StatelessWidget {
                                           vertical: 5,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: state.selectedCategory == category.id ? Colors.grey[800] : Colors.transparent,
+                                          color: state.selectedCategory == category.id ? Colors.grey[900] : Colors.transparent,
                                           borderRadius: BorderRadius.circular(100),
                                         ),
                                         child: Text(
@@ -199,18 +205,19 @@ class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        DefaultButton(
           onPressed: () {
             Navigator.pop(context);
           },
           child: const Text('انصراف'),
         ),
-        TextButton(
-          onPressed: () {
+        PrimaryButton(
+          onPressed: () async {
             if (formKey.currentState!.saveAndValidate()) {
-              context.read<CategoryCubit>().createCategory(formKey.currentState?.value);
+              if (await context.read<CategoryCubit>().createCategory(formKey.currentState?.value)) {
+                if (context.mounted) Navigator.pop(context);
+              }
             }
-            Navigator.pop(context);
           },
           child: const Text('ثبت'),
         ),

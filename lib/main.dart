@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:coffeeya_admin/product/screens/product_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:form_builder_validators/localization/l10n.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:hive/hive.dart';
 
 import 'core/config/constant.dart';
@@ -37,12 +39,15 @@ class MyApp extends StatelessWidget {
       ),
       showSemanticsDebugger: false,
       debugShowCheckedModeBanner: false,
-      // localizationsDelegates: const [
-      //   FormBuilderLocalizations.delegate,
-      // ],
-      // supportedLocales: const [
-      //   Locale('fa'),
-      // ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        FormBuilderLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('fa'),
+      ],
       builder: (context, child) {
         return Directionality(
           textDirection: TextDirection.rtl,
