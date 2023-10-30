@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:coffeeya_admin/product/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-
 
 import 'core/config/constant.dart';
 
