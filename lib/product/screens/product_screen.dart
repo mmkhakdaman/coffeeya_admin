@@ -192,7 +192,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/product/${widget.product.id}/edit');
+                    // Navigator.pushNamed(context, '/product/${widget.product.id}/edit');
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

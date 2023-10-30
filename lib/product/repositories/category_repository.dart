@@ -9,4 +9,12 @@ class CategoryRepository {
       return [];
     });
   }
+
+  static Future<CategoryModel?> createCategory(Map<String, dynamic>? value) async {
+    return await ApiClient.post('api/admin/category/create', data: value).then((response) {
+      return CategoryModel.fromJson(response.data['data']);
+    }).catchError((e) {
+      throw e;
+    });
+  }
 }

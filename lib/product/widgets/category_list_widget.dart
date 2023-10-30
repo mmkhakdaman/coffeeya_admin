@@ -1,6 +1,9 @@
 import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
+import 'package:coffeeya_admin/product/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 class CategoryListWidget extends StatelessWidget {
   const CategoryListWidget({super.key});
@@ -18,6 +21,16 @@ class CategoryListWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        useSafeArea: true,
+                        builder: (dialogContext) => BlocProvider.value(
+                          value: BlocProvider.of<CategoryCubit>(context),
+                          child: const CreateCategoryDialog(),
+                        ),
+                      );
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -141,6 +154,67 @@ class CategoryListWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CreateCategoryDialog extends StatefulWidget {
+  const CreateCategoryDialog({
+    super.key,
+  });
+
+  @override
+  State<CreateCategoryDialog> createState() => _CreateCategoryDialogState();
+}
+
+class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
+  final formKey = GlobalKey<FormBuilderState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('دسته جدید'),
+      backgroundColor: Colors.grey[100],
+      shadowColor: Colors.grey[100],
+      surfaceTintColor: Colors.grey[100],
+      content: SizedBox(
+        width: double.maxFinite,
+        child: FormBuilder(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FormBuilderTextField(
+                name: 'title',
+                decoration: InputDecoration(
+                  labelText: 'عنوان دسته',
+                  errorText: formKey.currentState?.fields['title']?.errorText,
+                ),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                ]),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('انصراف'),
+        ),
+        TextButton(
+          onPressed: () {
+            if (formKey.currentState!.saveAndValidate()) {
+              context.read<CategoryCubit>().createCategory(formKey.currentState?.value);
+            }
+            Navigator.pop(context);
+          },
+          child: const Text('ثبت'),
+        ),
+      ],
     );
   }
 }
