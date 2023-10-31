@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class Constants {
@@ -8,6 +9,7 @@ class Constants {
 
 class Global {
   static String? _accessToken;
+  static BuildContext? context;
 
   static void setAccessToken(String token) {
     final box = Hive.box(Constants.userBox);

@@ -1,5 +1,6 @@
 import 'package:coffeeya_admin/auth/repositories/auth.dart';
 import 'package:coffeeya_admin/core/config/constant.dart';
+import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:dio/dio.dart';
 
 class ApiClient {
@@ -24,31 +25,64 @@ class ApiClient {
     return dio;
   }
 
-  static Future<Response> get(String path) async {
-    return await dio().get(path).catchError((e) {
-      throw e;
+  static Future<ResponseModel> get(String endpoint, {Map<String, dynamic>? queryParameters, ProgressCallback? onReceiveProgress}) {
+    queryParameters = buildQueryParameters(queryParameters ?? {});
+    return dio().get(endpoint, queryParameters: queryParameters, onReceiveProgress: onReceiveProgress).then((response) {
+      return onResponse(response);
+    }).catchError((error) {
+      throw onError(error);
     });
   }
 
-  static Future<Response> post(
-    String path, {
-    dynamic data,
-  }) async {
-    return await dio().post(path, data: data).then((value) {
-      return value;
-    }).catchError((e) {
-      throw e;
+  static Future<ResponseModel> post(String endpoint,
+      {Object? data, Map<String, dynamic>? queryParameters, CancelToken? cancelToken, ProgressCallback? onSendProgress, ProgressCallback? onReceiveProgress}) {
+    return dio()
+        .post(endpoint, data: data, onSendProgress: onSendProgress, onReceiveProgress: onReceiveProgress, queryParameters: queryParameters, cancelToken: cancelToken)
+        .then((response) {
+      return onResponse(response);
+    }).catchError((error) {
+      throw onError(error);
     });
   }
 
-  static Future<Response> put(
-    String path, {
-    dynamic data,
-  }) async {
-    return await dio().put(path, data: data);
+  static Future<ResponseModel> put(String endpoint, {Map<String, dynamic>? queryParameters, Object? data}) {
+    return dio().put(endpoint, data: data, queryParameters: queryParameters).then((response) {
+      return onResponse(response);
+    }).catchError((error) {
+      throw onError(error);
+    });
   }
 
-  static Future<Response> delete(String path) async {
-    return await dio().delete(path);
+  static Future<ResponseModel> delete(String endpoint, {Object? data}) {
+    return dio().delete(endpoint, data: data).then((response) {
+      return onResponse(response);
+    }).catchError((error) {
+      throw onError(error);
+    });
   }
+
+  static ResponseModel onResponse(response) {
+    return ResponseModel(statusCode: response.statusCode ?? 500, json: response.data);
+  }
+
+  static ResponseModel onError(error) {
+    var response = error.response;
+    var responseModel = ResponseModel(statusCode: response.statusCode ?? 500, json: response.data);
+    // handelErrorAction(
+    //   response: responseModel,
+    // );
+    return responseModel;
+  }
+}
+
+Map<String, dynamic> buildQueryParameters(Map<String, dynamic> parameters) {
+  final queryParameters = <String, dynamic>{};
+
+  parameters.forEach((key, value) {
+    if (value != null) {
+      queryParameters[key] = value;
+    }
+  });
+
+  return queryParameters;
 }

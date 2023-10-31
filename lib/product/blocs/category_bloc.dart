@@ -1,6 +1,7 @@
 import 'package:coffeeya_admin/product/models/category_model.dart';
 import 'package:coffeeya_admin/product/models/product_mode.dart';
 import 'package:coffeeya_admin/product/repositories/category_repository.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryState {
@@ -23,8 +24,19 @@ class CategoryState {
   }
 
   List<ProductModel> get selectedCategoryProducts {
-    if (selectedCategory == 0) return categories.map((e) => e.products ?? []).expand((element) => element).toList();
+    if (selectedCategory == 0) return products;
+
     return categories.firstWhere((element) => element.id == selectedCategory).products ?? [];
+  }
+
+  List<ProductModel> get products {
+    return categories.map((e) => e.products ?? []).expand((element) => element).toList();
+  }
+
+  int get selectedCategoryIndex {
+    if (selectedCategory == 0) return 0;
+
+    return categories.indexWhere((element) => element.id == selectedCategory) + 1;
   }
 }
 
@@ -37,7 +49,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     await CategoryRepository.categories().then(
       (value) => emit(
         state.copyWith(
-          categories: value,
+          categories: value.data,
         ),
       ),
     );
@@ -58,6 +70,10 @@ class CategoryCubit extends Cubit<CategoryState> {
       ),
     );
   }
+
+  // context.read<CategoryCubit>().scrollController.currentContext!,
+
+  final scrollController = ScrollController();
 
   Future<bool> createCategory(Map<String, dynamic>? value) async {
     return CategoryRepository.createCategory(value).then((value) => getCategories()).then((value) => true).catchError((e) => false);

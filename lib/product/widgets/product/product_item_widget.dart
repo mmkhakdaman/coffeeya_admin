@@ -1,5 +1,6 @@
 import 'package:coffeeya_admin/product/models/product_mode.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ProductItemWidget extends StatefulWidget {
@@ -41,7 +42,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pushNamed(context, '/product/${widget.product.id}/edit');
+                    context.goNamed('product.edit', pathParameters: {'id': widget.product.id.toString()});
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

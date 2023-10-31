@@ -14,7 +14,7 @@ class AuthRepository {
         'password': password,
       },
     ).then((response) {
-      final login = LoginModel.fromJson(response.data);
+      final login = LoginModel.fromJson(response.json);
 
       Global.setAccessToken(login.accessToken!);
       return true;
@@ -33,7 +33,7 @@ class AuthRepository {
 
   static Future<bool> refresh() async {
     return await ApiClient.post('/api/admin/auth/refresh').then((response) {
-      final login = LoginModel.fromJson(response.data);
+      final login = LoginModel.fromJson(response.json);
 
       Global.setAccessToken(login.accessToken!);
       return true;
