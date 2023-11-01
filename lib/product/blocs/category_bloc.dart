@@ -1,5 +1,5 @@
 import 'package:coffeeya_admin/product/models/category_model.dart';
-import 'package:coffeeya_admin/product/models/product_mode.dart';
+import 'package:coffeeya_admin/product/models/product_model.dart';
 import 'package:coffeeya_admin/product/repositories/category_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,5 +77,41 @@ class CategoryCubit extends Cubit<CategoryState> {
 
   Future<bool> createCategory(Map<String, dynamic>? value) async {
     return CategoryRepository.createCategory(value).then((value) => getCategories()).then((value) => true).catchError((e) => false);
+  }
+
+  void updateProduct({required product}) {
+    var index = state.products.indexWhere((element) => element.id == product.id);
+    if (index != -1) {
+      state.products[index] = product;
+    } else {
+      state.products.add(product);
+    }
+
+    emit(
+      state.copyWith(
+        categories: state.categories.map((e) {
+          var index = e.products!.indexWhere((element) => element.id == product.id);
+          if (index != -1) {
+            e.products![index] = product;
+          }
+          return e;
+        }).toList(),
+      ),
+    );
+  }
+
+  void addProduct({required product}) {
+    state.products.add(product);
+
+    emit(
+      state.copyWith(
+        categories: state.categories.map((e) {
+          if (e.id == product.categoryId) {
+            e.products!.add(product);
+          }
+          return e;
+        }).toList(),
+      ),
+    );
   }
 }

@@ -1,6 +1,8 @@
-import 'package:coffeeya_admin/product/models/product_mode.dart';
+import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
+import 'package:coffeeya_admin/product/models/product_model.dart';
+import 'package:coffeeya_admin/product/screens/edit_product_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ProductItemWidget extends StatefulWidget {
@@ -13,8 +15,6 @@ class ProductItemWidget extends StatefulWidget {
 }
 
 class _ProductItemWidgetState extends State<ProductItemWidget> {
-  bool isActive = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +42,18 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    context.goNamed('product.edit', pathParameters: {'id': widget.product.id.toString()});
+                    // context.goNamed('product.edit', pathParameters: {'id': widget.product.id.toString()});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (pageContext) => BlocProvider.value(
+                          value: BlocProvider.of<CategoryCubit>(context),
+                          child: EditProductScreen(
+                            id: widget.product.id.toString(),
+                          ),
+                        ),
+                      ),
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,7 +90,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              isActive = !isActive;
+                              widget.product.isActive = !widget.product.isActive!;
                             });
                           },
                           child: Container(
@@ -87,15 +98,15 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                             height: 24,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: isActive ? Colors.green : Colors.grey,
+                              color: widget.product.isActive! ? Colors.green : Colors.grey,
                             ),
                             child: Stack(
                               children: [
                                 AnimatedPositioned(
                                   duration: const Duration(milliseconds: 200),
                                   curve: Curves.easeInOut,
-                                  left: isActive ? 16 : 0,
-                                  right: isActive ? 0 : 16,
+                                  left: widget.product.isActive! ? 16 : 0,
+                                  right: widget.product.isActive! ? 0 : 16,
                                   child: Container(
                                     width: 24,
                                     height: 24,
@@ -111,7 +122,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                         ),
                                       ],
                                     ),
-                                    child: isActive
+                                    child: widget.product.isActive!
                                         ? const Icon(
                                             Icons.check,
                                             color: Colors.green,

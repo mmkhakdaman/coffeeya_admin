@@ -6,7 +6,7 @@ class ProductModel {
   int order;
   int price;
   String image;
-  int? isActive;
+  bool? isActive;
   int? inStock;
   String createdAt;
   String updatedAt;
@@ -32,9 +32,9 @@ class ProductModel {
       description: json['description'],
       categoryId: json['category_id'],
       order: json['order'],
-      price: json['price'],
+      price: int.tryParse(json['price'].toString())!,
       image: json['image'],
-      isActive: json['is_active'],
+      isActive: json['is_active'] == null ? false : true,
       inStock: json['in_stock'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],

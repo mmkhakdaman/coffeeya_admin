@@ -1,9 +1,11 @@
 import 'package:coffeeya_admin/core/models/error.dart';
+import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
+import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
 import 'package:coffeeya_admin/product/models/category_model.dart';
-import 'package:coffeeya_admin/product/repositories/category_repository.dart';
 import 'package:coffeeya_admin/product/repositories/product_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
@@ -20,15 +22,10 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
   final formKey = GlobalKey<FormBuilderState>();
   List<CategoryModel> categories = [];
 
-  getCategorie() async {
-    categories = await CategoryRepository.categories().then((value) => value.data);
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
-    getCategorie();
+    categories = BlocProvider.of<CategoryCubit>(context).state.categories;
   }
 
   createProduct() {
@@ -37,12 +34,13 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
       ProductRepository.create(data: formKey.currentState!.value).then(
         (value) {
           if (value.statusCode == 201) {
+            BlocProvider.of<CategoryCubit>(context).addProduct(product: value.data);
             Navigator.pop(context);
           }
         },
       ).catchError(
         (e) {
-          setFormError(error: e.error, formKey: formKey);
+          if (e is ResponseModel) setFormError(error: e.error!, formKey: formKey);
         },
       );
     }
@@ -109,6 +107,26 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                           const SizedBox(
                             height: 12,
                           ),
+                          FormBuilderDropdown(
+                            name: 'category_id',
+                            decoration: InputDecoration(
+                              labelText: 'دسته بندی',
+                              errorText: formKey.currentState?.fields['title']?.errorText,
+                            ),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                            ]),
+                            items: [
+                              for (var category in categories)
+                                DropdownMenuItem(
+                                  value: category.id,
+                                  child: Text(category.title),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
                           SizedBox(
                             height: 120, // <-- TextField height
                             child: FormBuilderTextField(
@@ -116,8 +134,10 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                               maxLines: null,
                               expands: true,
                               keyboardType: TextInputType.multiline,
+                              textAlignVertical: TextAlignVertical.top,
                               decoration: InputDecoration(
                                 labelText: 'توضیحات محصول',
+                                alignLabelWithHint: true,
                                 errorText: formKey.currentState?.fields['title']?.errorText,
                               ),
                               validator: FormBuilderValidators.compose([
@@ -140,26 +160,6 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                               FormBuilderValidators.min(1000),
                               FormBuilderValidators.numeric(),
                             ]),
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          FormBuilderDropdown(
-                            name: 'category_id',
-                            decoration: InputDecoration(
-                              labelText: 'دسته بندی',
-                              errorText: formKey.currentState?.fields['title']?.errorText,
-                            ),
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
-                            items: [
-                              for (var category in categories)
-                                DropdownMenuItem(
-                                  value: category.id,
-                                  child: Text(category.title),
-                                ),
-                            ],
                           ),
                         ],
                       ),

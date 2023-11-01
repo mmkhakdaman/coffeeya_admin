@@ -16,7 +16,25 @@ class ApiClient {
       onError: (DioException e, handler) async {
         if (e.response?.statusCode == 401) {
           if (await AuthRepository.refresh()) {
-            handler.next(e);
+            final response = await dio.request(
+              e.requestOptions.path,
+              data: e.requestOptions.data,
+              queryParameters: e.requestOptions.queryParameters,
+              options: Options(
+                method: e.requestOptions.method,
+                sendTimeout: e.requestOptions.sendTimeout,
+                receiveTimeout: e.requestOptions.receiveTimeout,
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ${Global.getAccessToken()}',
+                },
+                responseType: e.requestOptions.responseType,
+                contentType: e.requestOptions.contentType,
+                validateStatus: e.requestOptions.validateStatus,
+              ),
+            );
+            handler.resolve(response);
           }
         }
         handler.next(e);

@@ -12,60 +12,61 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    showCreateProductButtomSheet() {
-      showModalBottomSheet(
-        context: context,
-        enableDrag: false,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(0),
-            topRight: Radius.circular(0),
-          ),
-        ),
-        builder: (bottomSheetContext) {
-          return const CreateProductButtomSheet();
-        },
-      );
-    }
-
     return BlocProvider(
       create: (context) => CategoryCubit(
         CategoryState(),
       ),
       child: HomeContextLayout(
-        floatingActionButton: ElevatedButton(
-          onPressed: () {
-            showCreateProductButtomSheet();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green[500],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'محصول جدید',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
+        floatingActionButton: Builder(builder: (context) {
+          return ElevatedButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                enableDrag: false,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
+                  ),
                 ),
+                builder: (bottomSheetContext) {
+                  return BlocProvider.value(
+                    value: BlocProvider.of<CategoryCubit>(context),
+                    child: const CreateProductButtomSheet(),
+                  );
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green[500],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
               ),
-              SizedBox(width: 8),
-              Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 20,
-              ),
-            ],
-          ),
-        ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'محصول جدید',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ],
+            ),
+          );
+        }),
         child: const ProductListWidget(),
       ),
     );
