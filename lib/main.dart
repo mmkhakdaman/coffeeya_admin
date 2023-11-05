@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:coffeeya_admin/product/screens/edit_product_screen.dart';
-import 'package:coffeeya_admin/product/screens/product_screen.dart';
+import 'package:coffeeya_admin/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 // ignore: depend_on_referenced_packages
@@ -24,14 +23,7 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       name: "home",
-      builder: (context, state) => const ProductScreen(),
-    ),
-    GoRoute(
-      path: '/product/:id',
-      name: "product.edit",
-      builder: (context, state) => EditProductScreen(
-        id: state.pathParameters['id']!,
-      ),
+      builder: (context, state) => const HomeScreen(),
     ),
   ],
 );

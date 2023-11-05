@@ -113,79 +113,50 @@ class _ProductListWidgetState extends State<ProductListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return <Widget>[headList(innerBoxIsScrolled)];
-      },
-      body: BlocBuilder<CategoryCubit, CategoryState>(
-        buildWhen: (previous, current) => previous.selectedCategory != current.selectedCategory || previous.categories != current.categories,
-        builder: (context, state) {
-          return DefaultTabController(
-            length: state.categories.length + 1,
-            child: Builder(
-              builder: (BuildContext context) {
-                final TabController tabController = DefaultTabController.of(context);
-                tabController.addListener(() {
-                  if (!tabController.indexIsChanging) {
-                    if (tabController.index == 0) {
-                      context.read<CategoryCubit>().clearSelectedCategory();
-                      context.read<CategoryCubit>().scrollController.animateTo(
-                            0,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                    } else {
-                      final selectedId = state.categories[tabController.index - 1].id;
-                      context.read<CategoryCubit>().selectCategory(selectedId);
-
-                      // var selectedCategoryButtonObject = ObjectKey("category_${selectedId}_button");
-
-                      // print(selectedCategoryButtonObject);
-                      // if (selectedCategoryButtonObject != null) {
-                      //   context.read<CategoryCubit>().scrollController.animateTo(
-                      //         selectedCategoryButtonObject.findRenderObject()!.paintBounds.right,
-                      //         duration: const Duration(milliseconds: 300),
-                      //         curve: Curves.easeInOut,
-                      //       );
-                      // }
-                    }
-                  }
-                });
-                tabController.animateTo(state.selectedCategoryIndex);
-                return TabBarView(
-                  controller: tabController,
+    return BlocBuilder<CategoryCubit, CategoryState>(
+      buildWhen: (previous, current) => previous.categories != current.categories,
+      builder: (context, state) {
+        return DefaultTabController(
+          length: state.categories.length + 1,
+          child: NestedScrollView(
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[headList(innerBoxIsScrolled)];
+            },
+            body: TabBarView(
+              children: [
+                ListView(
+                  shrinkWrap: true,
+                  controller: ScrollController(), //just add this line
+                  scrollDirection: Axis.vertical,
                   children: [
+                    for (var product in state.products)
+                      ProductItemWidget(
+                        product: product,
+                      ),
+                  ],
+                ),
+                for (var category in state.categories)
+                  if (category.products != null && category.products!.isEmpty)
+                    const Center(
+                      child: Text("محصولی ایجاد نشده:)"),
+                    )
+                  else
                     ListView(
                       shrinkWrap: true,
+                      controller: ScrollController(), //just add this line
+                      scrollDirection: Axis.vertical,
                       children: [
-                        for (var product in state.products)
+                        for (var product in category.products ?? [])
                           ProductItemWidget(
                             product: product,
                           ),
                       ],
                     ),
-                    for (var category in state.categories)
-                      if (category.products!.isEmpty)
-                        const Center(
-                          child: Text("محصولی ایجاد نشده:)"),
-                        )
-                      else
-                        ListView(
-                          shrinkWrap: true,
-                          children: [
-                            for (var product in category.products ?? [])
-                              ProductItemWidget(
-                                product: product,
-                              ),
-                          ],
-                        ),
-                  ],
-                );
-              },
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

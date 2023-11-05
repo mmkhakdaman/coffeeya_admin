@@ -1,12 +1,12 @@
-import 'dart:developer';
-
 import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:coffeeya_admin/core/utils/api_client.dart';
 import 'package:coffeeya_admin/product/models/category_model.dart';
 
 class CategoryRepository {
   static Future<ResponseModel> categories() async {
-    var response = await ApiClient.get('api/admin/category/list').catchError((e) {
+    var response = await ApiClient.get('api/admin/category/list', queryParameters: {
+      'with_product': true,
+    }).catchError((e) {
       return e..data = List<CategoryModel>.empty();
     });
 

@@ -7,7 +7,7 @@ class ProductModel {
   int price;
   String image;
   bool? isActive;
-  int? inStock;
+  bool? inStock;
   String createdAt;
   String updatedAt;
 
