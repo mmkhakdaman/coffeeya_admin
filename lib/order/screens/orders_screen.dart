@@ -1,3 +1,4 @@
+import 'package:coffeeya_admin/core/config/color.dart';
 import 'package:coffeeya_admin/core/layout/home/context.dart';
 import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
 import 'package:coffeeya_admin/order/wdigets/tabs/completed_tab.dart';
@@ -17,60 +18,72 @@ class OrderScreen extends StatelessWidget {
       create: (context) => OrderCubit(
         OrderState(),
       ),
-      child: DefaultTabController(
-        length: 5,
-        child: HomeContextLayout(
-          appBar: AppBar(
-            title: const Text("سفارشات"),
-            bottom: const TabBar(
-              isScrollable: true,
-              tabs: [
-                Tab(
-                  text: "در انتظار تایید",
-                  icon: FaIcon(
-                    FontAwesomeIcons.clipboardCheck,
-                    size: 16,
+      child: HomeContextLayout(
+        child: DefaultTabController(
+          length: 5,
+          child: NestedScrollView(
+            controller: ScrollController(),
+            scrollDirection: Axis.vertical,
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  title: const Text("سفارشات"),
+                  pinned: true,
+                  floating: true,
+                  forceElevated: innerBoxIsScrolled,
+                  bottom: const TabBar(
+                    isScrollable: true,
+                    unselectedLabelColor: XColors.gray_8,
+                    tabs: <Tab>[
+                      Tab(
+                        text: "در انتظار تایید",
+                        icon: FaIcon(
+                          FontAwesomeIcons.clipboardCheck,
+                          size: 16,
+                        ),
+                      ),
+                      Tab(
+                        text: "در حال اماده سازی",
+                        icon: FaIcon(
+                          FontAwesomeIcons.bowlFood,
+                          size: 16,
+                        ),
+                      ),
+                      Tab(
+                        text: "در حال ارسال",
+                        icon: Icon(
+                          Icons.delivery_dining,
+                          size: 16,
+                        ),
+                      ),
+                      Tab(
+                        text: "تحویل داده شده",
+                        icon: FaIcon(
+                          FontAwesomeIcons.boxArchive,
+                          size: 16,
+                        ),
+                      ),
+                      Tab(
+                        text: "لغو شده",
+                        icon: FaIcon(
+                          FontAwesomeIcons.trashCan,
+                          size: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Tab(
-                  text: "در حال اماده سازی",
-                  icon: FaIcon(
-                    FontAwesomeIcons.bowlFood,
-                    size: 16,
-                  ),
-                ),
-                Tab(
-                  text: "در حال ارسال",
-                  icon: Icon(
-                    Icons.delivery_dining,
-                    size: 16,
-                  ),
-                ),
-                Tab(
-                  text: "تحویل داده شده",
-                  icon: FaIcon(
-                    FontAwesomeIcons.boxArchive,
-                    size: 16,
-                  ),
-                ),
-                Tab(
-                  text: "لغو شده",
-                  icon: FaIcon(
-                    FontAwesomeIcons.trashCan,
-                    size: 16,
-                  ),
-                ),
+              ];
+            },
+            body: const TabBarView(
+              children: [
+                PendingOrderTab(),
+                ConfirmedOrderTab(),
+                DeliveredOrderTab(),
+                CompleteedOrderTab(),
+                CompleteedOrderTab(),
               ],
             ),
-          ),
-          child: const TabBarView(
-            children: [
-              PendingOrderTab(),
-              ConfirmedOrderTab(),
-              DeliveredOrderTab(),
-              CompleteedOrderTab(),
-              CompleteedOrderTab(),
-            ],
           ),
         ),
       ),

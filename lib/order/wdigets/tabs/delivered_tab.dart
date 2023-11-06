@@ -38,9 +38,20 @@ class DeliveredOrderTab extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'شماره سفارش: ${order.id}',
-                                    style: Theme.of(context).textTheme.titleLarge,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'شماره سفارش: ${order.id}',
+                                        style: Theme.of(context).textTheme.titleLarge,
+                                      ),
+                                      if (order.isDelivery!)
+                                        const FaIcon(
+                                          Icons.delivery_dining,
+                                          color: XColors.gray_8,
+                                          size: 14,
+                                        ),
+                                    ],
                                   ),
                                   const SizedBox(height: 12),
                                   for (var item in order.items ?? List<OrderItemModel>.empty())
@@ -61,7 +72,48 @@ class DeliveredOrderTab extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 24),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          order.customer?.name ?? 'بدون نام',
+                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                color: XColors.gray_8,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        order.customer!.phone!,
+                                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                              color: XColors.gray_8,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (order.address != null) ...[
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'آدرس:',
+                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                color: XColors.gray_9,
+                                              ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            order.address!.address!,
+                                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                                  color: XColors.gray_12,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                  const SizedBox(height: 12),
                                   Row(
                                     children: [
                                       const SizedBox(width: 8),
@@ -123,6 +175,7 @@ class DeliveredOrderTab extends StatelessWidget {
                                                             Expanded(
                                                               flex: 2,
                                                               child: PrimaryButton(
+                                                                isSuccessful: true,
                                                                 onPressed: () {
                                                                   context.read<OrderCubit>().updateOrder(
                                                                         id: order.id,

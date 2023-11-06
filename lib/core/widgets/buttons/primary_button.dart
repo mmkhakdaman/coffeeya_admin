@@ -1,13 +1,16 @@
+import 'package:coffeeya_admin/core/config/color.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onPressed;
+  final isSuccessful;
 
   const PrimaryButton({
     super.key,
     required this.child,
     required this.onPressed,
+    this.isSuccessful = false,
   });
 
   @override
@@ -15,9 +18,9 @@ class PrimaryButton extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.grey[900],
-        surfaceTintColor: Colors.grey[900],
+        foregroundColor: isSuccessful ? Colors.white : Colors.white,
+        backgroundColor: isSuccessful ? XColors.green_8 : Colors.grey[900],
+        surfaceTintColor: isSuccessful ? XColors.green_8 : Colors.grey[900],
         shadowColor: Colors.grey[900],
         padding: const EdgeInsets.symmetric(
           vertical: 10,

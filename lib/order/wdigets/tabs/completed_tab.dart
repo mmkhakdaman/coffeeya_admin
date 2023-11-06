@@ -4,6 +4,7 @@ import 'package:coffeeya_admin/order/models/order_item_model.dart';
 import 'package:coffeeya_admin/order/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CompleteedOrderTab extends StatelessWidget {
   const CompleteedOrderTab({
@@ -35,9 +36,20 @@ class CompleteedOrderTab extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'شماره سفارش: ${order.id}',
-                                    style: Theme.of(context).textTheme.titleLarge,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'شماره سفارش: ${order.id}',
+                                        style: Theme.of(context).textTheme.titleLarge,
+                                      ),
+                                      if (order.isDelivery!)
+                                        const FaIcon(
+                                          Icons.delivery_dining,
+                                          color: XColors.gray_8,
+                                          size: 14,
+                                        ),
+                                    ],
                                   ),
                                   const SizedBox(height: 12),
                                   for (var item in order.items ?? List<OrderItemModel>.empty())
@@ -58,6 +70,48 @@ class CompleteedOrderTab extends StatelessWidget {
                                         ),
                                       ],
                                     ),
+                                  const SizedBox(height: 24),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          order.customer?.name ?? 'بدون نام',
+                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                color: XColors.gray_8,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        order.customer!.phone!,
+                                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                              color: XColors.gray_8,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (order.address != null) ...[
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'آدرس:',
+                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                                color: XColors.gray_9,
+                                              ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            order.address!.address!,
+                                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                                  color: XColors.gray_12,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                  const SizedBox(height: 12),
                                 ],
                               ),
                             ),
