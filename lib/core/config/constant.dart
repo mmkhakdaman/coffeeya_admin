@@ -1,30 +1,38 @@
+import 'package:coffeeya_admin/core/config/token.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 
 class Constants {
-  static const baseUrl = "http://test.coffeeya.ir/";
+  static String? _baseUrl;
   static const userBox = "user";
   static const configBox = "config";
+
+  static get baseUrl => getBaseUrl();
+
+  static String getBaseUrl() {
+    if (_baseUrl == null) {
+      final box = Hive.box(Constants.configBox);
+
+      _baseUrl = box.get('base_url');
+    }
+    if (_baseUrl == null) {
+      Token.removeAccessToken();
+      Global.context?.goNamed('auth');
+    }
+
+    return _baseUrl!;
+  }
+
+  static setBaseUrl(url) {
+    final box = Hive.box(Constants.configBox);
+
+    box.put('base_url', url);
+
+    _baseUrl = url;
+  }
 }
 
 class Global {
-  static String? _accessToken;
   static BuildContext? context;
-
-  static void setAccessToken(String token) {
-    final box = Hive.box(Constants.userBox);
-
-    box.put('access_token', token);
-
-    _accessToken = token;
-  }
-
-  static String? getAccessToken() {
-    if (_accessToken == null) {
-      final box = Hive.box(Constants.userBox);
-
-      _accessToken = box.get('access_token');
-    }
-    return _accessToken;
-  }
 }

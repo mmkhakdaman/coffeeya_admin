@@ -1,5 +1,5 @@
-import 'package:coffeeya_admin/auth/repositories/auth.dart';
 import 'package:coffeeya_admin/core/config/constant.dart';
+import 'package:coffeeya_admin/core/config/token.dart';
 import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:dio/dio.dart';
 
@@ -10,36 +10,9 @@ class ApiClient {
     dio.options.headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${Global.getAccessToken()}',
     };
-    dio.interceptors.add(InterceptorsWrapper(
-      onError: (DioException e, handler) async {
-        if (e.response?.statusCode == 401) {
-          if (await AuthRepository.refresh()) {
-            final response = await dio.request(
-              e.requestOptions.path,
-              data: e.requestOptions.data,
-              queryParameters: e.requestOptions.queryParameters,
-              options: Options(
-                method: e.requestOptions.method,
-                sendTimeout: e.requestOptions.sendTimeout,
-                receiveTimeout: e.requestOptions.receiveTimeout,
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ${Global.getAccessToken()}',
-                },
-                responseType: e.requestOptions.responseType,
-                contentType: e.requestOptions.contentType,
-                validateStatus: e.requestOptions.validateStatus,
-              ),
-            );
-            handler.resolve(response);
-          }
-        }
-        handler.next(e);
-      },
-    ));
+
+    dio.interceptors.add(TokenInterceptor());
     return dio;
   }
 

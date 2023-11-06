@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:coffeeya_admin/auth/screens/auth_screen.dart';
+import 'package:coffeeya_admin/core/config/token.dart';
 import 'package:coffeeya_admin/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -21,9 +23,26 @@ class MyHttpOverrides extends HttpOverrides {
 final _router = GoRouter(
   routes: [
     GoRoute(
+      path: '/auth',
+      name: "auth",
+      builder: (context, state) => const AuthScreen(),
+      redirect: (context, state) {
+        if (Token.isLoggedIn()) {
+          return '/';
+        }
+        return null;
+      },
+    ),
+    GoRoute(
       path: '/',
       name: "home",
       builder: (context, state) => const HomeScreen(),
+      redirect: (context, state) {
+        if (!Token.isLoggedIn()) {
+          return '/auth';
+        }
+        return null;
+      },
     ),
   ],
 );
@@ -39,6 +58,7 @@ main() async {
   }
 
   await Hive.openBox(Constants.userBox);
+  await Hive.openBox(Constants.configBox);
 
   runApp(const MyApp());
 }

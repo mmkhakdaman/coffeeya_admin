@@ -1,4 +1,3 @@
-import 'package:coffeeya_admin/auth/repositories/auth.dart';
 import 'package:coffeeya_admin/core/layout/home/context.dart';
 import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
 import 'package:coffeeya_admin/product/widgets/category/category_list_widget.dart';
@@ -82,32 +81,20 @@ class ProductListWidget extends StatefulWidget {
 
 class _ProductListWidgetState extends State<ProductListWidget> {
   Widget headList(innerBoxIsScrolled) {
-    return SliverAppBar(
+    return const SliverAppBar(
       toolbarHeight: 50,
       pinned: true,
       floating: true,
       automaticallyImplyLeading: false,
-      shape: const Border(bottom: BorderSide(color: Colors.black12)),
+      shape: Border(bottom: BorderSide(color: Colors.black12)),
       elevation: 0,
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
-      actions: [
-        InkWell(
-          onTap: () async {
-            await AuthRepository.login(phone: "9944432552", password: "password");
-          },
-          child: Icon(
-            Icons.search,
-            color: Colors.grey[400],
-            size: 24,
-          ),
-        ),
-      ],
-      title: const Text(
+      title: Text(
         "محصولات",
         style: TextStyle(color: Colors.black),
       ),
-      bottom: const CategoryListWidget(),
+      bottom: CategoryListWidget(),
     );
   }
 

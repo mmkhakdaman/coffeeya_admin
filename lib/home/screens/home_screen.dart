@@ -1,5 +1,6 @@
 import 'package:coffeeya_admin/order/screens/orders_screen.dart';
 import 'package:coffeeya_admin/product/screens/product_screen.dart';
+import 'package:coffeeya_admin/setting/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const ProductScreen(),
     const OrderScreen(),
-    const Text('Profile Screen'),
+    const SettingScreen(),
   ];
 
   void _onItemTapped(int index) {
