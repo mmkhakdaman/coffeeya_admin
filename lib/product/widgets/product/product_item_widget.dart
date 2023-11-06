@@ -1,5 +1,6 @@
 import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
 import 'package:coffeeya_admin/product/models/product_model.dart';
+import 'package:coffeeya_admin/product/repositories/product_repository.dart';
 import 'package:coffeeya_admin/product/screens/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,8 @@ class ProductItemWidget extends StatefulWidget {
 }
 
 class _ProductItemWidgetState extends State<ProductItemWidget> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +45,6 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // context.goNamed('product.edit', pathParameters: {'id': widget.product.id.toString()});
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -87,55 +89,73 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                   children: [
                     Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              widget.product.isActive = !widget.product.isActive!;
-                            });
-                          },
-                          child: Container(
-                            width: 40,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: widget.product.isActive! ? Colors.green : Colors.grey,
-                            ),
-                            child: Stack(
-                              children: [
-                                AnimatedPositioned(
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut,
-                                  left: widget.product.isActive! ? 16 : 0,
-                                  right: widget.product.isActive! ? 0 : 16,
-                                  child: Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 5,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: widget.product.isActive!
-                                        ? const Icon(
-                                            Icons.check,
-                                            color: Colors.green,
-                                            size: 16,
-                                          )
-                                        : const Icon(
-                                            Icons.close,
-                                            color: Colors.grey,
-                                            size: 16,
+                        MouseRegion(
+                          cursor: MaterialStateMouseCursor.clickable,
+                          child: GestureDetector(
+                            onTap: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await ProductRepository.toggleActive(
+                                product: widget.product,
+                              ).then((value) {
+                                setState(() {
+                                  isLoading = false;
+                                  widget.product.inStock = value.data.inStock;
+                                });
+                              }).catchError((e) {
+                                print(e);
+                              });
+                            },
+                            child: Container(
+                              width: 40,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: widget.product.inStock! ? Colors.green : Colors.grey,
+                              ),
+                              child: Stack(
+                                children: [
+                                  AnimatedPositioned(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeInOut,
+                                    left: widget.product.inStock! ? 16 : 0,
+                                    right: widget.product.inStock! ? 0 : 16,
+                                    child: Container(
+                                      width: 24,
+                                      height: 24,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 5,
+                                            offset: const Offset(0, 2),
                                           ),
+                                        ],
+                                      ),
+                                      child: isLoading
+                                          ? CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: widget.product.inStock! ? Colors.green : Colors.grey,
+                                            )
+                                          : widget.product.inStock!
+                                              ? const Icon(
+                                                  Icons.check,
+                                                  color: Colors.green,
+                                                  size: 16,
+                                                )
+                                              : const Icon(
+                                                  Icons.close,
+                                                  color: Colors.grey,
+                                                  size: 16,
+                                                ),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

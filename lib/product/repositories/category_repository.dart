@@ -4,28 +4,24 @@ import 'package:coffeeya_admin/product/models/category_model.dart';
 
 class CategoryRepository {
   static Future<ResponseModel> categories() async {
-    var response = await ApiClient.get('api/admin/category/list', queryParameters: {
+    return await ApiClient.get('api/admin/category/list', queryParameters: {
       'with_product': true,
-    }).catchError((e) {
-      return e..data = List<CategoryModel>.empty();
-    });
-
-    if (response.statusCode == 200) {
+    }).then((value) {
       List<CategoryModel> data = [];
-      for (var json in response.json['data']) {
+      for (var json in value.json['data']) {
         data.add(CategoryModel.fromJson(json));
       }
-      response.data = data;
-    }
-
-    return response;
+      return value..data = data;
+    }).catchError((e) {
+      return e..data = [] as List<CategoryModel>;
+    });
   }
 
-  static Future<CategoryModel?> createCategory(Map<String, dynamic>? value) async {
+  static Future<ResponseModel> createCategory(Map<String, dynamic>? value) async {
     return await ApiClient.post('api/admin/category/create', data: value).then((response) {
-      return CategoryModel.fromJson(response.data['data']);
+      return response..data = CategoryModel.fromJson(response.json['data']);
     }).catchError((e) {
-      throw e;
+      throw e..data = {};
     });
   }
 }

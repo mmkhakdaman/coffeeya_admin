@@ -34,8 +34,8 @@ class ProductModel {
       order: json['order'],
       price: int.tryParse(json['price'].toString())!,
       image: json['image'],
-      isActive: json['is_active'] == null ? false : true,
-      inStock: json['in_stock'],
+      isActive: json['is_active'] ?? false,
+      inStock: json['in_stock'] ?? false,
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );

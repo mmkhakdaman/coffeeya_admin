@@ -23,7 +23,8 @@ class OrderRepository {
 
       return value..data = data;
     }).catchError((e) {
-      return e..data = List<OrderModel>.empty();
+      inspect(e);
+      return e..data = [] as List<OrderModel>;
     });
   }
 
@@ -36,7 +37,6 @@ class OrderRepository {
     ).then((value) {
       return value..data = OrderModel.fromJson(value.json['data']);
     }).catchError((e) {
-      inspect(e);
       return e;
     });
   }

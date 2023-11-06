@@ -153,6 +153,7 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               labelText: 'قیمت محصول',
+                              suffixText: 'تومان',
                               errorText: formKey.currentState?.fields['title']?.errorText,
                             ),
                             validator: FormBuilderValidators.compose([

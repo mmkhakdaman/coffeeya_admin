@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:coffeeya_admin/core/utils/api_client.dart';
 import 'package:coffeeya_admin/product/models/product_model.dart';
@@ -27,14 +29,22 @@ class ProductRepository {
     });
   }
 
-  static Future<ResponseModel> update(String id, {required Map<String, dynamic> data}) {
-    return ApiClient.put('/api/admin/product/update/$id', data: data)
-        .then(
+  static Future<ResponseModel> update(String id, {required Map<String, dynamic> data}) async {
+    return await ApiClient.put('/api/admin/product/update/$id', data: data).then(
       (value) => value..data = ProductModel.fromJson(value.json['data']),
-    )
-        .catchError(
+    );
+  }
+
+  static Future<ResponseModel> toggleActive({required ProductModel product}) async {
+    return await ApiClient.put('/api/admin/product/toggle-stock/${product.id}').then(
+      (value) {
+        product = ProductModel.fromJson(value.json['data']);
+        return value..data = product;
+      },
+    ).catchError(
       (e) {
-        throw e..data = data;
+        inspect(e);
+        throw e;
       },
     );
   }

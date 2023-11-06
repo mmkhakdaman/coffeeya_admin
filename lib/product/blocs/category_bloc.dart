@@ -55,10 +55,6 @@ class CategoryCubit extends Cubit<CategoryState> {
     );
   }
 
-  Future<bool> createCategory(Map<String, dynamic>? value) async {
-    return CategoryRepository.createCategory(value).then((value) => getCategories()).then((value) => true).catchError((e) => false);
-  }
-
   void updateProduct({required product}) {
     var index = state.products.indexWhere((element) => element.id == product.id);
     if (index != -1) {
@@ -92,6 +88,14 @@ class CategoryCubit extends Cubit<CategoryState> {
           return e;
         }).toList(),
       ),
+    );
+  }
+
+  void addCategory({required category}) {
+    state.categories.add(category);
+
+    emit(
+      state.copyWith(categories: state.categories),
     );
   }
 }
