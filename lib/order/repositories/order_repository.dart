@@ -15,7 +15,7 @@ class OrderRepository {
       if (page != null) 'page': page,
       if (perPage != null) 'per_page': perPage,
     }).then((value) {
-      List<OrderModel> data = [];
+      List<OrderModel> data = <OrderModel>[];
 
       for (var json in value.json['data']) {
         data.add(OrderModel.fromJson(json));
@@ -24,7 +24,7 @@ class OrderRepository {
       return value..data = data;
     }).catchError((e) {
       inspect(e);
-      return e..data = [] as List<OrderModel>;
+      return e..data = <OrderModel>[];
     });
   }
 
