@@ -50,12 +50,12 @@ final _router = GoRouter(
 main() async {
   HttpOverrides.global = MyHttpOverrides();
 
-  if (Platform.isAndroid) {
-    await Hive.initFlutter();
-  } else {
-    var path = Directory.current.path;
-    Hive.init(path);
-  }
+  // if (Platform.isAndroid) {
+  await Hive.initFlutter();
+  // } else {
+  // var path = Directory.current.path;
+  // Hive.init(path);
+  // }
 
   await Hive.openBox(Constants.userBox);
   await Hive.openBox(Constants.configBox);
