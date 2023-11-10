@@ -4,4 +4,4 @@ services:
   front:
     build: .
     ports:
-      - "88:88"
+      - "80:88"
