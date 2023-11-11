@@ -4,16 +4,16 @@ import 'package:coffeeya_admin/product/models/category_model.dart';
 
 class CategoryRepository {
   static Future<ResponseModel> categories() async {
+    List<CategoryModel> data = [];
     return await ApiClient.get('api/admin/category/list', queryParameters: {
       'with_product': true,
     }).then((value) {
-      List<CategoryModel> data = [];
       for (var json in value.json['data']) {
         data.add(CategoryModel.fromJson(json));
       }
       return value..data = data;
     }).catchError((e) {
-      return e..data = [] as List<CategoryModel>;
+      return e..data = data;
     });
   }
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:coffeeya_admin/core/models/error.dart';
 import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
@@ -21,7 +19,8 @@ class CreateCategoryDialog extends StatefulWidget {
 }
 
 class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
-  final formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  bool isSubmitting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
       content: SizedBox(
         width: double.maxFinite,
         child: FormBuilder(
-          key: formKey,
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -41,7 +40,7 @@ class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
                 name: 'title',
                 decoration: InputDecoration(
                   labelText: 'عنوان دسته',
-                  errorText: formKey.currentState?.fields['title']?.errorText,
+                  errorText: _formKey.currentState?.fields['title']?.errorText,
                 ),
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(),
@@ -52,29 +51,51 @@ class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
         ),
       ),
       actions: [
-        DefaultButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('انصراف'),
-        ),
-        PrimaryButton(
-          onPressed: () async {
-            if (formKey.currentState!.saveAndValidate()) {
-              await CategoryRepository.createCategory(formKey.currentState?.value).then(
-                (value) {
-                  BlocProvider.of<CategoryCubit>(context).addCategory(category: value.data);
-                  Navigator.pop(context);
+        Row(
+          children: [
+            DefaultButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('انصراف'),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: BlocBuilder<CategoryCubit, CategoryState>(
+                buildWhen: (previous, current) => previous.isSubmitting != current.isSubmitting,
+                builder: (context, state) {
+                  return PrimaryButton(
+                    onPressed: () async {
+                      await BlocProvider.of<CategoryCubit>(context).storeCategory(formKey: _formKey).then((value) {
+                        if (value) Navigator.pop(context);
+                      });
+                    },
+                    isLoading: BlocProvider.of<CategoryCubit>(context).state.isSubmitting,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('ثبت'),
+                        if (state.isSubmitting) ...[
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.grey[900],
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ]
+                      ],
+                    ),
+                  );
                 },
-              ).catchError(
-                (e) {
-                  if (e is ResponseModel) setFormError(error: e.error!, formKey: formKey);
-                },
-              );
-            }
-          },
-          child: const Text('ثبت'),
-        ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
