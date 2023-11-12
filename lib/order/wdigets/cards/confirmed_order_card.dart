@@ -170,15 +170,13 @@ class ConfirmedOrderCard extends StatelessWidget {
                                           isSuccessful: true,
                                           onPressed: () {
                                             if (order.isDelivery!) {
-                                              context.read<OrderCubit>().updateOrder(
-                                                    id: order.id,
-                                                    status: 'delivered',
-                                                  );
+                                              context.read<OrderCubit>().updateOrder(id: order.id, data: {
+                                                "status": 'delivered',
+                                              });
                                             } else {
-                                              context.read<OrderCubit>().updateOrder(
-                                                    id: order.id,
-                                                    status: 'completed',
-                                                  );
+                                              context.read<OrderCubit>().updateOrder(id: order.id, data: {
+                                                "status": 'completed',
+                                              });
                                             }
                                             Navigator.pop(context);
                                           },

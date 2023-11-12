@@ -5,6 +5,7 @@ import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
 import 'package:coffeeya_admin/product/models/category_model.dart';
 import 'package:coffeeya_admin/product/repositories/product_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -156,6 +157,9 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                               suffixText: 'تومان',
                               errorText: formKey.currentState?.fields['title']?.errorText,
                             ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.min(1000),

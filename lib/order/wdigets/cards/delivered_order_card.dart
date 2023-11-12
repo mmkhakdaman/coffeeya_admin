@@ -164,9 +164,11 @@ class DeliveredOrderCard extends StatelessWidget {
                                           isSuccessful: true,
                                           onPressed: () {
                                             context.read<OrderCubit>().updateOrder(
-                                                  id: order.id,
-                                                  status: 'completed',
-                                                );
+                                              id: order.id,
+                                              data: {
+                                                "status": 'completed',
+                                              },
+                                            );
                                             Navigator.pop(context);
                                           },
                                           child: const Text('بله'),

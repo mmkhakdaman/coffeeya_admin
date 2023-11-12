@@ -28,12 +28,13 @@ class OrderRepository {
     });
   }
 
-  static Future<ResponseModel> updateOrder({int? id, required String status}) async {
+  static Future<ResponseModel> updateOrder({
+    int? id,
+    Map data = const {},
+  }) async {
     return await ApiClient.put(
       'api/admin/orders/$id',
-      data: {
-        'status': status,
-      },
+      data: data,
     ).then((value) {
       return value..data = OrderModel.fromJson(value.json['data']);
     }).catchError((e) {

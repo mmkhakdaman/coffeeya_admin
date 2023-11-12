@@ -65,14 +65,16 @@ class OrderCubit extends Cubit<OrderState> {
     );
   }
 
-  Future<void> updateOrder({int? id, required String status}) async {
+  Future<void> updateOrder({
+    int? id,
+    Map data = const {},
+  }) async {
     await OrderRepository.updateOrder(
       id: id,
-      status: status,
+      data: data,
     ).then(
       (value) {
-        final newOrders = state.orders.where((element) => element.id != id).toList();
-
+        final newOrders = List<OrderModel>.from(state.orders.where((element) => element.id != id).toList());
         newOrders.add(value.data);
 
         emit(

@@ -34,7 +34,7 @@ class _DeliveredOrderTabState extends State<DeliveredOrderTab> with AutomaticKee
                 );
               } else {
                 return BlocBuilder<OrderCubit, OrderState>(
-                  buildWhen: (previous, current) => previous.pendingOrders != current.pendingOrders,
+                  buildWhen: (previous, current) => previous.deliveredOrders != current.deliveredOrders,
                   builder: (context, state) {
                     return RefreshIndicator(
                       onRefresh: () {
@@ -42,11 +42,11 @@ class _DeliveredOrderTabState extends State<DeliveredOrderTab> with AutomaticKee
                               status: 'pending',
                             );
                       },
-                      child: state.pendingOrders.isNotEmpty
+                      child: state.deliveredOrders.isNotEmpty
                           ? SingleChildScrollView(
                               controller: ScrollController(),
                               child: Column(
-                                children: [for (var order in state.pendingOrders) DeliveredOrderCard(order: order)],
+                                children: [for (var order in state.deliveredOrders) DeliveredOrderCard(order: order)],
                               ),
                             )
                           : const SingleChildScrollView(
