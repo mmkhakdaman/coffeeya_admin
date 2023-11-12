@@ -31,6 +31,7 @@ class OrderScreen extends StatelessWidget {
                   pinned: true,
                   floating: true,
                   forceElevated: innerBoxIsScrolled,
+                  centerTitle: true,
                   bottom: const TabBar(
                     isScrollable: true,
                     unselectedLabelColor: XColors.gray_8,
