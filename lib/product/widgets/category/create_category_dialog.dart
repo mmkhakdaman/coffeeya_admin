@@ -20,7 +20,7 @@ class CreateCategoryDialog extends StatefulWidget {
 
 class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  bool isSubmitting = false;
+  final ValueNotifier<bool> isSubmitting = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -61,22 +61,38 @@ class _CreateCategoryDialogState extends State<CreateCategoryDialog> {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: BlocBuilder<CategoryCubit, CategoryState>(
-                buildWhen: (previous, current) => previous.isSubmitting != current.isSubmitting,
-                builder: (context, state) {
+              child: ValueListenableBuilder<bool>(
+                valueListenable: isSubmitting,
+                builder: (context, value, child) {
                   return PrimaryButton(
                     onPressed: () async {
-                      await BlocProvider.of<CategoryCubit>(context).storeCategory(formKey: _formKey).then((value) {
-                        if (value) Navigator.pop(context);
-                      });
+                      if (_formKey.currentState!.saveAndValidate()) {
+                        isSubmitting.value = true;
+                        await CategoryRepository.createCategory(_formKey.currentState?.value).then(
+                          (value) {
+                            BlocProvider.of<CategoryCubit>(context).addCategory(category: value.data);
+                            Navigator.pop(context);
+                          },
+                        ).catchError(
+                          (e) {
+                            if (e is ResponseModel) setFormError(error: e.error!, formKey: _formKey);
+                          },
+                        ).whenComplete(
+                          () {
+                            isSubmitting.value = false;
+                          },
+                        );
+                      }
                     },
-                    isLoading: BlocProvider.of<CategoryCubit>(context).state.isSubmitting,
+                    isLoading: isSubmitting.value,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('ثبت'),
-                        if (state.isSubmitting) ...[
-                          const SizedBox(width: 10),
+                        if (isSubmitting.value) ...[
+                          const SizedBox(
+                            width: 10,
+                          ),
                           SizedBox(
                             width: 15,
                             height: 15,

@@ -1,240 +1,67 @@
-import 'package:coffeeya_admin/core/config/color.dart';
-import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
-import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
 import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
-import 'package:coffeeya_admin/order/models/order_item_model.dart';
-import 'package:coffeeya_admin/order/models/order_model.dart';
+import 'package:coffeeya_admin/order/wdigets/cards/confirmed_order_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ConfirmedOrderTab extends StatelessWidget {
+class ConfirmedOrderTab extends StatefulWidget {
   const ConfirmedOrderTab({
     super.key,
   });
 
   @override
+  State<ConfirmedOrderTab> createState() => _ConfirmedOrderTabState();
+}
+
+class _ConfirmedOrderTabState extends State<ConfirmedOrderTab> with AutomaticKeepAliveClientMixin<ConfirmedOrderTab> {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
-        BlocBuilder<OrderCubit, OrderState>(
-          buildWhen: (previous, current) => previous.confirmedOrders != current.confirmedOrders,
-          builder: (context, state) {
-            return Expanded(
-              child: RefreshIndicator(
-                onRefresh: () {
-                  return context.read<OrderCubit>().getOrders(
-                        status: 'confirmed',
-                      );
-                },
-                child: state.confirmedOrders.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: state.confirmedOrders.length,
-                        itemBuilder: (context, index) {
-                          OrderModel order = state.confirmedOrders[index];
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+        Expanded(
+          child: FutureBuilder<void>(
+            future: context.read<OrderCubit>().getOrders(
+                  status: 'confirmed',
+                  perPage: 1000,
+                ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return BlocBuilder<OrderCubit, OrderState>(
+                  buildWhen: (previous, current) => previous.pendingOrders != current.pendingOrders,
+                  builder: (context, state) {
+                    return RefreshIndicator(
+                      onRefresh: () {
+                        return context.read<OrderCubit>().getOrders(
+                              status: 'pending',
+                            );
+                      },
+                      child: state.pendingOrders.isNotEmpty
+                          ? SingleChildScrollView(
+                              controller: ScrollController(),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'شماره سفارش: ${order.id}',
-                                        style: Theme.of(context).textTheme.titleLarge,
-                                      ),
-                                      if (order.isDelivery!)
-                                        const FaIcon(
-                                          Icons.delivery_dining,
-                                          color: XColors.gray_8,
-                                          size: 14,
-                                        ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  for (var item in order.items ?? List<OrderItemModel>.empty())
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          item.product!.title,
-                                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                                color: XColors.gray_12,
-                                              ),
-                                        ),
-                                        Text(
-                                          '${item.quantity} x',
-                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                                color: XColors.gray_8,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  const SizedBox(height: 24),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          order.customer?.name ?? 'بدون نام',
-                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                                color: XColors.gray_8,
-                                              ),
-                                        ),
-                                      ),
-                                      Text(
-                                        order.customer!.phone!,
-                                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                              color: XColors.gray_8,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  if (order.address != null) ...[
-                                    const SizedBox(height: 16),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'آدرس:',
-                                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                                color: XColors.gray_9,
-                                              ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            order.address!.address!,
-                                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                                  color: XColors.gray_12,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                  const SizedBox(height: 12),
-                                  Row(
-                                    children: [
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        flex: 1,
-                                        child: PrimaryButton(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                order.isDelivery! ? 'ارسال شد' : 'تحویل داده شد',
-                                              ),
-                                              const SizedBox(width: 8),
-                                              if (order.isDelivery!)
-                                                const Icon(
-                                                  Icons.delivery_dining,
-                                                  size: 16,
-                                                )
-                                              else
-                                                const FaIcon(
-                                                  FontAwesomeIcons.handHolding,
-                                                  size: 16,
-                                                ),
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            showModalBottomSheet(
-                                              context: context,
-                                              constraints: const BoxConstraints(
-                                                maxHeight: 200,
-                                              ),
-                                              shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.vertical(
-                                                  top: Radius.circular(20),
-                                                ),
-                                              ),
-                                              builder: (modalContext) {
-                                                return BlocProvider.value(
-                                                  value: BlocProvider.of<OrderCubit>(context),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                      horizontal: 16,
-                                                      vertical: 24,
-                                                    ),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          order.isDelivery! ? 'ارسال سفارش' : 'تحویل سفارش',
-                                                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                                                fontWeight: FontWeight.w500,
-                                                              ),
-                                                        ),
-                                                        const SizedBox(height: 16),
-                                                        Text(
-                                                          "آیا از ${order.isDelivery! ? 'ارسال' : 'تحویل'} سفارش اطمینان دارید؟",
-                                                          style: Theme.of(context).textTheme.bodyMedium,
-                                                        ),
-                                                        const SizedBox(height: 16),
-                                                        const Spacer(),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: PrimaryButton(
-                                                                isSuccessful: true,
-                                                                onPressed: () {
-                                                                  if (order.isDelivery!) {
-                                                                    context.read<OrderCubit>().updateOrder(
-                                                                          id: order.id,
-                                                                          status: 'delivered',
-                                                                        );
-                                                                  } else {
-                                                                    context.read<OrderCubit>().updateOrder(
-                                                                          id: order.id,
-                                                                          status: 'completed',
-                                                                        );
-                                                                  }
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: const Text('بله'),
-                                                              ),
-                                                            ),
-                                                            const SizedBox(width: 8),
-                                                            Expanded(
-                                                              child: DefaultButton(
-                                                                child: const Text('خیر'),
-                                                                onPressed: () {
-                                                                  Navigator.pop(context);
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                children: [for (var order in state.pendingOrders) ConfirmedOrderCard(order: order)],
+                              ),
+                            )
+                          : const SingleChildScrollView(
+                              child: Center(
+                                child: Text(
+                                  'اینجا خبری نیست:)',
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      )
-                    : const Center(
-                        child: Text(
-                          'اینجا خبری نیست:)',
-                        ),
-                      ),
-              ),
-            );
-          },
+                    );
+                  },
+                );
+              }
+            },
+          ),
         ),
       ],
     );

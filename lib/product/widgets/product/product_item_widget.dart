@@ -103,8 +103,6 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                   isLoading = false;
                                   widget.product.inStock = value.data.inStock;
                                 });
-                              }).catchError((e) {
-                                print(e);
                               });
                             },
                             child: Container(

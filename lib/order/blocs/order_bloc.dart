@@ -25,22 +25,22 @@ class OrderState {
 
 class OrderCubit extends Cubit<OrderState> {
   OrderCubit(super.initialState) {
-    getOrders(
-      status: 'pending',
-      perPage: 1000,
-    );
-    getOrders(
-      status: 'confirmed',
-      perPage: 1000,
-    );
-    getOrders(
-      status: 'delivered',
-      perPage: 1000,
-    );
-    getOrders(
-      status: 'completed',
-      perPage: 10,
-    );
+    // getOrders(
+    //   status: 'pending',
+    //   perPage: 1000,
+    // );
+    // getOrders(
+    //   status: 'confirmed',
+    //   perPage: 1000,
+    // );
+    // getOrders(
+    //   status: 'delivered',
+    //   perPage: 1000,
+    // );
+    // getOrders(
+    //   status: 'completed',
+    //   perPage: 10,
+    // );
   }
 
   Future<void> getOrders({
