@@ -4,6 +4,7 @@ import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
 import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
 import 'package:coffeeya_admin/order/models/order_item_model.dart';
 import 'package:coffeeya_admin/order/models/order_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,26 +107,18 @@ class PendingOrderCard extends StatelessWidget {
                       var formKey = GlobalKey<FormBuilderState>();
                       showModalBottomSheet(
                         context: context,
-                        constraints: const BoxConstraints(
-                          maxHeight: 260,
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
+                        isScrollControlled: true,
                         builder: (modalContext) {
                           return BlocProvider.value(
                             value: BlocProvider.of<OrderCubit>(context),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 24,
+                              padding: EdgeInsets.only(
+                                bottom: MediaQuery.of(modalContext).viewInsets.bottom,
                               ),
                               child: FormBuilder(
                                 key: formKey,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text("تایید سفارش",
                                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -162,7 +155,6 @@ class PendingOrderCard extends StatelessWidget {
                                         );
                                       },
                                     ),
-                                    const Spacer(),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
