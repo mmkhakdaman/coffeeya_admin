@@ -106,6 +106,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
         return DefaultTabController(
           length: state.categories.length + 1,
           child: NestedScrollView(
+            scrollDirection: Axis.vertical,
+            controller: ScrollController(),
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[headList(innerBoxIsScrolled)];
             },
@@ -118,7 +120,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                 else
                   ListView(
                     shrinkWrap: true,
-                    controller: ScrollController(), //just add this line
+                    physics: const ScrollPhysics(),
+                    controller: ScrollController(),
                     scrollDirection: Axis.vertical,
                     children: [
                       for (var product in state.products)
@@ -135,7 +138,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                   else
                     ListView(
                       shrinkWrap: true,
-                      controller: ScrollController(), //just add this line
+                      physics: const ScrollPhysics(),
+                      controller: ScrollController(),
                       scrollDirection: Axis.vertical,
                       children: [
                         for (var product in category.products ?? [])

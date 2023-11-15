@@ -12,6 +12,8 @@ class OrderState {
   OrderState copyWith({
     List<OrderModel>? orders,
   }) {
+    orders?.sort((a, b) => a.pendingAt!.compareTo(b.pendingAt!));
+
     return OrderState(
       orders: orders ?? this.orders,
     );
@@ -24,24 +26,7 @@ class OrderState {
 }
 
 class OrderCubit extends Cubit<OrderState> {
-  OrderCubit(super.initialState) {
-    // getOrders(
-    //   status: 'pending',
-    //   perPage: 1000,
-    // );
-    // getOrders(
-    //   status: 'confirmed',
-    //   perPage: 1000,
-    // );
-    // getOrders(
-    //   status: 'delivered',
-    //   perPage: 1000,
-    // );
-    // getOrders(
-    //   status: 'completed',
-    //   perPage: 10,
-    // );
-  }
+  OrderCubit(super.initialState) {}
 
   Future<void> getOrders({
     String? status,

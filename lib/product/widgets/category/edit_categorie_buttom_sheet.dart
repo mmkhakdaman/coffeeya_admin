@@ -113,35 +113,45 @@ class _EditCategoriesButtomSheetState extends State<EditCategoriesButtomSheet> {
                         for (var i = 0; i < _categories.length; i++) ...[
                           ListTile(
                             key: ValueKey(_categories[i].id),
-                            title: Text(_categories[i].title),
+                            title: Text(
+                              _categories[i].title,
+                            ),
+                            contentPadding: EdgeInsets.only(
+                              right: 10,
+                            ),
                             trailing: ReorderableDragStartListener(
                               key: ValueKey<int>(i),
                               index: i,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Switch(
-                                    value: _disabledCategories[_categories[i].id] ?? false,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _disabledCategories[_categories[i].id] = value;
-                                      });
-                                    },
-                                    activeColor: Colors.white,
-                                    inactiveThumbColor: Colors.grey[100],
-                                    inactiveTrackColor: Colors.grey[300],
-                                    activeTrackColor: Colors.green[500],
-                                    hoverColor: Colors.grey[400]?.withOpacity(0.3),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(
-                                    Icons.drag_handle,
-                                    size: 24,
-                                    color: Colors.grey[700],
-                                  ),
-                                ],
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Switch(
+                                      value: _disabledCategories[_categories[i].id] ?? false,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _disabledCategories[_categories[i].id] = value;
+                                        });
+                                      },
+                                      activeColor: Colors.white,
+                                      inactiveThumbColor: Colors.grey[100],
+                                      inactiveTrackColor: Colors.grey[300],
+                                      activeTrackColor: Colors.green[500],
+                                      hoverColor: Colors.grey[400]?.withOpacity(0.3),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Icon(
+                                      Icons.drag_handle,
+                                      size: 24,
+                                      color: Colors.grey[700],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

@@ -32,13 +32,15 @@ class OrderRepository {
     int? id,
     Map data = const {},
   }) async {
+    print(data);
     return await ApiClient.put(
       'api/admin/orders/$id',
       data: data,
     ).then((value) {
       return value..data = OrderModel.fromJson(value.json['data']);
     }).catchError((e) {
-      return e;
+      inspect(e);
+      throw e;
     });
   }
 }

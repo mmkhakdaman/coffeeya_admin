@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:coffeeya_admin/core/config/constant.dart';
 import 'package:coffeeya_admin/core/config/token.dart';
 import 'package:coffeeya_admin/core/models/response_model.dart';
@@ -57,6 +59,7 @@ class ApiClient {
   }
 
   static ResponseModel onError(error) {
+    inspect(error);
     var response = error.response;
     var responseModel = ResponseModel(statusCode: response.statusCode ?? 500, json: response.data);
     // handelErrorAction(

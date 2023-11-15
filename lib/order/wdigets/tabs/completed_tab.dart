@@ -43,11 +43,11 @@ class _CompleteedOrderTabState extends State<CompleteedOrderTab> with AutomaticK
                             );
                       },
                       child: state.completedOrders.isNotEmpty
-                          ? SingleChildScrollView(
+                          ? ListView(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
                               controller: ScrollController(),
-                              child: Column(
-                                children: [for (var order in state.completedOrders) CompletedOrderCard(order: order)],
-                              ),
+                              children: [for (var order in state.completedOrders) CompletedOrderCard(order: order)],
                             )
                           : const SingleChildScrollView(
                               child: Center(

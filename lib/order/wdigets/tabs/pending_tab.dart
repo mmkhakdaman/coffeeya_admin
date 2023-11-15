@@ -43,11 +43,11 @@ class _PendingOrderTabState extends State<PendingOrderTab> with AutomaticKeepAli
                             );
                       },
                       child: state.pendingOrders.isNotEmpty
-                          ? SingleChildScrollView(
+                          ? ListView(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
                               controller: ScrollController(),
-                              child: Column(
-                                children: [for (var order in state.pendingOrders) PendingOrderCard(order: order)],
-                              ),
+                              children: [for (var order in state.pendingOrders) PendingOrderCard(order: order)],
                             )
                           : const SingleChildScrollView(
                               child: Center(

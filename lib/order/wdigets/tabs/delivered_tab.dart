@@ -43,11 +43,11 @@ class _DeliveredOrderTabState extends State<DeliveredOrderTab> with AutomaticKee
                             );
                       },
                       child: state.deliveredOrders.isNotEmpty
-                          ? SingleChildScrollView(
+                          ? ListView(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
                               controller: ScrollController(),
-                              child: Column(
-                                children: [for (var order in state.deliveredOrders) DeliveredOrderCard(order: order)],
-                              ),
+                              children: [for (var order in state.deliveredOrders) DeliveredOrderCard(order: order)],
                             )
                           : const SingleChildScrollView(
                               child: Center(

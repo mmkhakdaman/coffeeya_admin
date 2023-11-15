@@ -43,11 +43,11 @@ class _ConfirmedOrderTabState extends State<ConfirmedOrderTab> with AutomaticKee
                             );
                       },
                       child: state.confirmedOrders.isNotEmpty
-                          ? SingleChildScrollView(
+                          ? ListView(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
                               controller: ScrollController(),
-                              child: Column(
-                                children: [for (var order in state.confirmedOrders) ConfirmedOrderCard(order: order)],
-                              ),
+                              children: [for (var order in state.confirmedOrders) ConfirmedOrderCard(order: order)],
                             )
                           : const SingleChildScrollView(
                               child: Center(

@@ -9,8 +9,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
+
+  @override
+  State<OrderScreen> createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStateMixin {
+  TabController? tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 5, vsync: this, initialIndex: 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,73 +31,80 @@ class OrderScreen extends StatelessWidget {
       create: (context) => OrderCubit(
         OrderState(),
       ),
-      child: HomeContextLayout(
-        child: DefaultTabController(
-          length: 5,
-          child: NestedScrollView(
-            controller: ScrollController(),
-            scrollDirection: Axis.vertical,
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  title: const Text("سفارشات"),
-                  pinned: true,
-                  floating: true,
-                  forceElevated: innerBoxIsScrolled,
-                  centerTitle: true,
-                  bottom: const TabBar(
-                    isScrollable: true,
-                    unselectedLabelColor: XColors.gray_8,
-                    tabs: <Tab>[
-                      Tab(
-                        text: "در انتظار تایید",
-                        icon: FaIcon(
-                          FontAwesomeIcons.clipboardCheck,
-                          size: 16,
+      child: NestedScrollView(
+        scrollDirection: Axis.vertical,
+        controller: ScrollController(),
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              title: const Text("سفارشات"),
+              pinned: true,
+              floating: true,
+              forceElevated: innerBoxIsScrolled,
+              centerTitle: true,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(75),
+                child: Container(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: TabBar(
+                      isScrollable: true,
+                      unselectedLabelColor: XColors.gray_8,
+                      controller: tabController,
+                      tabs: <Tab>[
+                        Tab(
+                          text: "در انتظار تایید",
+                          icon: FaIcon(
+                            FontAwesomeIcons.clipboardCheck,
+                            size: 16,
+                          ),
                         ),
-                      ),
-                      Tab(
-                        text: "در حال اماده سازی",
-                        icon: FaIcon(
-                          FontAwesomeIcons.bowlFood,
-                          size: 16,
+                        Tab(
+                          text: "در حال اماده سازی",
+                          icon: FaIcon(
+                            FontAwesomeIcons.bowlFood,
+                            size: 16,
+                          ),
                         ),
-                      ),
-                      Tab(
-                        text: "در حال ارسال",
-                        icon: Icon(
-                          Icons.delivery_dining,
-                          size: 16,
+                        Tab(
+                          text: "در حال ارسال",
+                          icon: Icon(
+                            Icons.delivery_dining,
+                            size: 16,
+                          ),
                         ),
-                      ),
-                      Tab(
-                        text: "تحویل داده شده",
-                        icon: FaIcon(
-                          FontAwesomeIcons.boxArchive,
-                          size: 16,
+                        Tab(
+                          text: "تحویل داده شده",
+                          icon: FaIcon(
+                            FontAwesomeIcons.boxArchive,
+                            size: 16,
+                          ),
                         ),
-                      ),
-                      Tab(
-                        text: "لغو شده",
-                        icon: FaIcon(
-                          FontAwesomeIcons.trashCan,
-                          size: 16,
+                        Tab(
+                          text: "لغو شده",
+                          icon: FaIcon(
+                            FontAwesomeIcons.trashCan,
+                            size: 16,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ];
-            },
-            body: const TabBarView(
-              children: [
-                PendingOrderTab(),
-                ConfirmedOrderTab(),
-                DeliveredOrderTab(),
-                CompleteedOrderTab(),
-                CompleteedOrderTab(),
-              ],
+              ),
             ),
+          ];
+        },
+        body: HomeContextLayout(
+          child: TabBarView(
+            controller: tabController,
+            children: [
+              PendingOrderTab(),
+              ConfirmedOrderTab(),
+              DeliveredOrderTab(),
+              CompleteedOrderTab(),
+              CompleteedOrderTab(),
+            ],
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:coffeeya_admin/core/config/color.dart';
+import 'package:coffeeya_admin/core/helpers/datetime.dart';
 import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
 import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
 import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
@@ -7,6 +8,8 @@ import 'package:coffeeya_admin/order/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 class ConfirmedOrderCard extends StatelessWidget {
   const ConfirmedOrderCard({
@@ -99,6 +102,46 @@ class ConfirmedOrderCard extends StatelessWidget {
                 ],
               ),
             ],
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'زمان ثبت سفارش:',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: XColors.gray_9,
+                      ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  order.pendingAt != null ? dateTimeToJalali(order.pendingAt!) : "بدون زمان",
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: XColors.gray_12,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'زمان آماده سازی:',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: XColors.gray_9,
+                      ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  order.completedAt != null
+                      ? order.completedAt!.toLocal().hour.toString().padLeft(2, '0') + ':' + order.completedAt!.toLocal().minute.toString().padLeft(2, '0')
+                      : "بدون زمان",
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: XColors.gray_12,
+                      ),
+                ),
+              ],
+            ),
             const SizedBox(height: 12),
             Row(
               children: [

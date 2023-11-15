@@ -1,10 +1,10 @@
 import 'package:coffeeya_admin/core/config/color.dart';
+import 'package:coffeeya_admin/core/helpers/datetime.dart';
 import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
 import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
 import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
 import 'package:coffeeya_admin/order/models/order_item_model.dart';
 import 'package:coffeeya_admin/order/models/order_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,6 +98,25 @@ class PendingOrderCard extends StatelessWidget {
             ],
             const SizedBox(height: 16),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'زمان ثبت سفارش:',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: XColors.gray_9,
+                      ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  order.pendingAt != null ? dateTimeToJalali(order.pendingAt!) : "بدون زمان",
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: XColors.gray_12,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
               children: [
                 Expanded(
                   flex: 2,
@@ -113,12 +132,16 @@ class PendingOrderCard extends StatelessWidget {
                             value: BlocProvider.of<OrderCubit>(context),
                             child: Padding(
                               padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(modalContext).viewInsets.bottom,
+                                top: 24,
+                                left: 16,
+                                right: 16,
+                                bottom: MediaQuery.of(modalContext).viewInsets.bottom + 24,
                               ),
                               child: FormBuilder(
                                 key: formKey,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("تایید سفارش",
                                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -155,6 +178,7 @@ class PendingOrderCard extends StatelessWidget {
                                         );
                                       },
                                     ),
+                                    const SizedBox(height: 24),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
@@ -167,7 +191,7 @@ class PendingOrderCard extends StatelessWidget {
                                                 context.read<OrderCubit>().updateOrder(
                                                   id: order.id,
                                                   data: {
-                                                    'complete_at': formKey.currentState!.value['completion_time'],
+                                                    'completed_at': formKey.currentState!.value['completion_time'].toString(),
                                                     'status': 'confirmed',
                                                   },
                                                 );
