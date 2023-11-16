@@ -1,7 +1,7 @@
 import 'package:coffeeya_admin/order/models/order_item_model.dart';
 import 'package:coffeeya_admin/share/models/address_model.dart';
-import 'package:coffeeya_admin/share/models/table_model.dart';
 import 'package:coffeeya_admin/share/models/customer.dart';
+import 'package:coffeeya_admin/share/models/table_model.dart';
 
 class OrderModel {
   int? id;

@@ -90,6 +90,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
       elevation: 0,
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
+      centerTitle: true,
       title: Text(
         "محصولات",
         style: TextStyle(color: Colors.black),

@@ -4,9 +4,9 @@ import 'package:coffeeya_admin/auth/screens/auth_screen.dart';
 import 'package:coffeeya_admin/core/config/token.dart';
 import 'package:coffeeya_admin/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
