@@ -230,14 +230,7 @@ class PendingOrderCard extends StatelessWidget {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        constraints: const BoxConstraints(
-                          maxHeight: 200,
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
+                        isScrollControlled: true,
                         builder: (modalContext) {
                           return BlocProvider.value(
                             value: BlocProvider.of<OrderCubit>(context),
@@ -248,6 +241,7 @@ class PendingOrderCard extends StatelessWidget {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text("لغو سفارش",
                                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -259,7 +253,6 @@ class PendingOrderCard extends StatelessWidget {
                                     style: Theme.of(context).textTheme.bodyMedium,
                                   ),
                                   const SizedBox(height: 16),
-                                  const Spacer(),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
