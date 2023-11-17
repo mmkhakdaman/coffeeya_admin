@@ -144,67 +144,65 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                                     ),
                                   ),
                                   clipBehavior: Clip.none,
-                                  child: Expanded(
-                                    child: Stack(
-                                      children: [
-                                        field.value != null
-                                            ? Center(
-                                                child: Image.file(
-                                                  field.value!,
-                                                  fit: BoxFit.cover,
-                                                  frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-                                                    if (wasSynchronouslyLoaded) {
-                                                      return child;
-                                                    }
-                                                    return AnimatedOpacity(
-                                                      opacity: frame == null ? 0 : 1,
-                                                      duration: const Duration(seconds: 1),
-                                                      curve: Curves.easeOut,
-                                                      child: child,
-                                                    );
-                                                  },
-                                                  width: double.maxFinite,
-                                                ),
-                                              )
-                                            : Center(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.add,
-                                                      color: Theme.of(context).primaryColor,
-                                                      size: 40,
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Text(
-                                                      'انتخاب تصویر',
-                                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                            color: Theme.of(context).primaryColor,
-                                                          ),
-                                                    ),
-                                                  ],
-                                                ),
+                                  child: Stack(
+                                    children: [
+                                      field.value != null
+                                          ? Center(
+                                              child: Image.file(
+                                                field.value!,
+                                                fit: BoxFit.cover,
+                                                frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+                                                  if (wasSynchronouslyLoaded) {
+                                                    return child;
+                                                  }
+                                                  return AnimatedOpacity(
+                                                    opacity: frame == null ? 0 : 1,
+                                                    duration: const Duration(seconds: 1),
+                                                    curve: Curves.easeOut,
+                                                    child: child,
+                                                  );
+                                                },
+                                                width: double.maxFinite,
                                               ),
-                                        ValueListenableBuilder(
-                                          valueListenable: isChoosingImage,
-                                          builder: (context, value, child) {
-                                            if (!value) return const SizedBox();
-                                            return Positioned.fill(
-                                              child: Container(
-                                                color: Colors.black.withOpacity(0.5),
-                                                child: Center(
-                                                  child: CircularProgressIndicator(
-                                                    color: Colors.white,
+                                            )
+                                          : Center(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: Theme.of(context).primaryColor,
+                                                    size: 40,
                                                   ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    'انتخاب تصویر',
+                                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                          color: Theme.of(context).primaryColor,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                      ValueListenableBuilder(
+                                        valueListenable: isChoosingImage,
+                                        builder: (context, value, child) {
+                                          if (!value) return const SizedBox();
+                                          return Positioned.fill(
+                                            child: Container(
+                                              color: Colors.black.withOpacity(0.5),
+                                              child: Center(
+                                                child: CircularProgressIndicator(
+                                                  color: Colors.white,
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );
