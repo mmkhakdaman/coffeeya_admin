@@ -39,7 +39,21 @@ class ApiClient {
   }
 
   static Future<ResponseModel> put(String endpoint, {Map<String, dynamic>? queryParameters, Object? data}) {
-    return dio().put(endpoint, data: data, queryParameters: queryParameters).then((response) {
+    if (data is FormData) {
+      data.fields.add(MapEntry('_method', 'PUT'));
+    }
+
+    if (data is Map) {
+      data['_method'] = 'PUT';
+    }
+
+    return dio()
+        .post(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+    )
+        .then((response) {
       return onResponse(response);
     }).catchError((error) {
       throw onError(error);

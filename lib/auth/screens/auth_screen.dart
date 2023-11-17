@@ -56,8 +56,10 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('کافیا'),
+        centerTitle: true,
       ),
       body: Center(
         child: Card(

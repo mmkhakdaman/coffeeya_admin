@@ -31,70 +31,68 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
       create: (context) => OrderCubit(
         OrderState(),
       ),
-      child: NestedScrollView(
-        scrollDirection: Axis.vertical,
-        controller: ScrollController(),
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              title: const Text("سفارشات"),
-              pinned: true,
-              floating: true,
-              forceElevated: innerBoxIsScrolled,
-              centerTitle: true,
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(75),
-                child: Container(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: TabBar(
-                      isScrollable: true,
-                      unselectedLabelColor: XColors.gray_8,
-                      controller: tabController,
-                      tabs: <Tab>[
-                        Tab(
-                          text: "در انتظار تایید",
-                          icon: FaIcon(
-                            FontAwesomeIcons.clipboardCheck,
-                            size: 16,
-                          ),
-                        ),
-                        Tab(
-                          text: "در حال اماده سازی",
-                          icon: FaIcon(
-                            FontAwesomeIcons.bowlFood,
-                            size: 16,
-                          ),
-                        ),
-                        Tab(
-                          text: "در حال ارسال",
-                          icon: Icon(
-                            Icons.delivery_dining,
-                            size: 16,
-                          ),
-                        ),
-                        Tab(
-                          text: "تحویل داده شده",
-                          icon: FaIcon(
-                            FontAwesomeIcons.boxArchive,
-                            size: 16,
-                          ),
-                        ),
-                        Tab(
-                          text: "لغو شده",
-                          icon: FaIcon(
-                            FontAwesomeIcons.trashCan,
-                            size: 16,
-                          ),
-                        ),
-                      ],
+      child: Scaffold(
+        // scrollDirection: Axis.vertical,
+        // controller: ScrollController(),
+        // headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        //   return <Widget>[
+        //     ,
+        //   ];
+        // },
+        appBar: AppBar(
+          title: const Text("سفارشات"),
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(75),
+            child: Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: TabBar(
+                  isScrollable: true,
+                  unselectedLabelColor: XColors.gray_8,
+                  controller: tabController,
+                  tabs: <Tab>[
+                    Tab(
+                      text: "در انتظار تایید",
+                      icon: FaIcon(
+                        FontAwesomeIcons.clipboardCheck,
+                        size: 16,
+                      ),
                     ),
-                  ),
+                    Tab(
+                      text: "در حال اماده سازی",
+                      icon: FaIcon(
+                        FontAwesomeIcons.bowlFood,
+                        size: 16,
+                      ),
+                    ),
+                    Tab(
+                      text: "در حال ارسال",
+                      icon: Icon(
+                        Icons.delivery_dining,
+                        size: 16,
+                      ),
+                    ),
+                    Tab(
+                      text: "تحویل داده شده",
+                      icon: FaIcon(
+                        FontAwesomeIcons.boxArchive,
+                        size: 16,
+                      ),
+                    ),
+                    Tab(
+                      text: "لغو شده",
+                      icon: FaIcon(
+                        FontAwesomeIcons.trashCan,
+                        size: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ];
-        },
+          ),
+        ),
         body: HomeContextLayout(
           child: TabBarView(
             controller: tabController,

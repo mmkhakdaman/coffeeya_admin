@@ -3,11 +3,12 @@ import 'dart:developer';
 import 'package:coffeeya_admin/core/models/response_model.dart';
 import 'package:coffeeya_admin/core/utils/api_client.dart';
 import 'package:coffeeya_admin/product/models/product_model.dart';
+import 'package:dio/dio.dart';
 
 class ProductRepository {
   // create product
   static Future<ResponseModel> create({
-    required Map<String, dynamic> data,
+    required FormData data,
   }) async {
     return await ApiClient.post(
       '/api/admin/product/create',
@@ -29,7 +30,7 @@ class ProductRepository {
     });
   }
 
-  static Future<ResponseModel> update(String id, {required Map<String, dynamic> data}) async {
+  static Future<ResponseModel> update(String id, {required FormData data}) async {
     return await ApiClient.put('/api/admin/product/update/$id', data: data).then(
       (value) => value..data = ProductModel.fromJson(value.json['data']),
     );
