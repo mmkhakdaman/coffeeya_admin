@@ -49,12 +49,14 @@ class _PendingOrderTabState extends State<PendingOrderTab> with AutomaticKeepAli
                               controller: ScrollController(),
                               children: [for (var order in state.pendingOrders) PendingOrderCard(order: order)],
                             )
-                          : const Expanded(
-                              child: Center(
-                                child: Text(
+                          : Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
                                   'اینجا خبری نیست:)',
                                 ),
-                              ),
+                              ],
                             ),
                     );
                   },

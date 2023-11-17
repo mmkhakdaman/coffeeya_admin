@@ -49,12 +49,14 @@ class _CompleteedOrderTabState extends State<CompleteedOrderTab> with AutomaticK
                               controller: ScrollController(),
                               children: [for (var order in state.completedOrders) CompletedOrderCard(order: order)],
                             )
-                          : const Expanded(
-                              child: Center(
-                                child: Text(
+                          : Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
                                   'اینجا خبری نیست:)',
                                 ),
-                              ),
+                              ],
                             ),
                     );
                   },

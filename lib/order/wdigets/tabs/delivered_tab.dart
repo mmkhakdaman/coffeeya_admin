@@ -49,12 +49,14 @@ class _DeliveredOrderTabState extends State<DeliveredOrderTab> with AutomaticKee
                               controller: ScrollController(),
                               children: [for (var order in state.deliveredOrders) DeliveredOrderCard(order: order)],
                             )
-                          : const Expanded(
-                              child: Center(
-                                child: Text(
+                          : Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
                                   'اینجا خبری نیست:)',
                                 ),
-                              ),
+                              ],
                             ),
                     );
                   },

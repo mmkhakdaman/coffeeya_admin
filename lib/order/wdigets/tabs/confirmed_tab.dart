@@ -49,12 +49,14 @@ class _ConfirmedOrderTabState extends State<ConfirmedOrderTab> with AutomaticKee
                               controller: ScrollController(),
                               children: [for (var order in state.confirmedOrders) ConfirmedOrderCard(order: order)],
                             )
-                          : const Expanded(
-                              child: Center(
-                                child: Text(
+                          : Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
                                   'اینجا خبری نیست:)',
                                 ),
-                              ),
+                              ],
                             ),
                     );
                   },
