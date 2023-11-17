@@ -49,7 +49,7 @@ class _DeliveredOrderTabState extends State<DeliveredOrderTab> with AutomaticKee
                               controller: ScrollController(),
                               children: [for (var order in state.deliveredOrders) DeliveredOrderCard(order: order)],
                             )
-                          : const SingleChildScrollView(
+                          : const Expanded(
                               child: Center(
                                 child: Text(
                                   'اینجا خبری نیست:)',

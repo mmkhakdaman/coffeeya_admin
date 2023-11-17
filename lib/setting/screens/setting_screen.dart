@@ -57,9 +57,9 @@ class SettingScreen extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
-                  // onTap: () {
-                  //   // Navigator.of(context).pushNamed("/tables");
-                  // },
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/tables");
+                  },
                   title: Text(
                     "میز ها",
                     style: Theme.of(context).textTheme.titleSmall,
