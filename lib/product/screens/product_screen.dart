@@ -21,7 +21,6 @@ class ProductScreen extends StatelessWidget {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                enableDrag: false,
                 isScrollControlled: true,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(

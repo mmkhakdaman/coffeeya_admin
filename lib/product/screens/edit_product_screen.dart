@@ -128,7 +128,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                   if (isChoosingImage.value) return;
                                   isChoosingImage.value = true;
                                   FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                    allowedExtensions: ['jpg', 'png', 'jpeg'],
                                     type: FileType.image,
                                   );
 
@@ -211,89 +210,83 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 body: Column(
                   children: [
                     Expanded(
-                      child: ListView(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                FormBuilderTextField(
-                                  name: 'title',
-                                  initialValue: product!.title,
-                                  enabled: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'عنوان محصول',
-                                    errorText: formKey.currentState?.fields['title']?.errorText,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            FormBuilderTextField(
+                              name: 'title',
+                              initialValue: product!.title,
+                              enabled: false,
+                              decoration: InputDecoration(
+                                labelText: 'عنوان محصول',
+                                errorText: formKey.currentState?.fields['title']?.errorText,
+                              ),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                              ]),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            FormBuilderDropdown(
+                              name: 'category_id',
+                              decoration: InputDecoration(
+                                labelText: 'دسته بندی',
+                                errorText: formKey.currentState?.fields['title']?.errorText,
+                              ),
+                              enabled: false,
+                              initialValue: product!.categoryId,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                              ]),
+                              items: [
+                                for (var category in categories)
+                                  DropdownMenuItem(
+                                    value: category.id,
+                                    child: Text(category.title),
                                   ),
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                  ]),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                FormBuilderDropdown(
-                                  name: 'category_id',
-                                  decoration: InputDecoration(
-                                    labelText: 'دسته بندی',
-                                    errorText: formKey.currentState?.fields['title']?.errorText,
-                                  ),
-                                  enabled: false,
-                                  initialValue: product!.categoryId,
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                  ]),
-                                  items: [
-                                    for (var category in categories)
-                                      DropdownMenuItem(
-                                        value: category.id,
-                                        child: Text(category.title),
-                                      ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                FormBuilderTextField(
-                                  name: 'price',
-                                  initialValue: product!.price.toString(),
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  decoration: InputDecoration(
-                                    labelText: 'قیمت',
-                                    errorText: formKey.currentState?.fields['price']?.errorText,
-                                    suffixText: "تومان",
-                                  ),
-                                  validator: FormBuilderValidators.compose([
-                                    FormBuilderValidators.required(),
-                                    FormBuilderValidators.numeric(),
-                                  ]),
-                                ),
-                                const SizedBox(height: 16),
-                                SizedBox(
-                                  height: 120,
-                                  child: FormBuilderTextField(
-                                    name: 'description',
-                                    initialValue: product!.description,
-                                    maxLines: null,
-                                    expands: true,
-                                    keyboardType: TextInputType.multiline,
-                                    textAlignVertical: TextAlignVertical.top,
-                                    decoration: InputDecoration(
-                                      labelText: 'توضیحات',
-                                      alignLabelWithHint: true,
-                                      errorText: formKey.currentState?.fields['description']?.errorText,
-                                    ),
-                                    validator: FormBuilderValidators.compose([
-                                      FormBuilderValidators.required(),
-                                    ]),
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
                               ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 16),
+                            FormBuilderTextField(
+                              name: 'price',
+                              initialValue: product!.price.toString(),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              decoration: InputDecoration(
+                                labelText: 'قیمت',
+                                errorText: formKey.currentState?.fields['price']?.errorText,
+                                suffixText: "تومان",
+                              ),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(),
+                                FormBuilderValidators.numeric(),
+                              ]),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              height: 120,
+                              child: FormBuilderTextField(
+                                name: 'description',
+                                initialValue: product!.description,
+                                maxLines: null,
+                                expands: true,
+                                keyboardType: TextInputType.multiline,
+                                textAlignVertical: TextAlignVertical.top,
+                                decoration: InputDecoration(
+                                  labelText: 'توضیحات',
+                                  alignLabelWithHint: true,
+                                  errorText: formKey.currentState?.fields['description']?.errorText,
+                                ),
+                                validator: FormBuilderValidators.compose([]),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
