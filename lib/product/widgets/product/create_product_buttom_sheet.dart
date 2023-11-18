@@ -8,6 +8,7 @@ import 'package:coffeeya_admin/product/models/category_model.dart';
 import 'package:coffeeya_admin/product/repositories/product_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,15 +42,23 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
     isSubmitting.value = true;
     if (formKey.currentState!.saveAndValidate()) {
       FormData formData = FormData.fromMap(formKey.currentState!.value);
+      formData.fields.removeWhere((element) => element.key == "image");
 
       if (formKey.currentState!.value['image'] != null) {
-        formData.files.add(MapEntry(
-          'image',
-          MultipartFile.fromFileSync(
-            formKey.currentState!.value['image'].path,
-            filename: formKey.currentState!.value['image'].path.split('/').last,
+        formData.files.add(
+          MapEntry(
+            'image',
+            kIsWeb
+                ? MultipartFile.fromBytes(
+                    (formKey.currentState!.value['image'] as PlatformFile).bytes!,
+                    filename: (formKey.currentState!.value['image'] as PlatformFile).name,
+                  )
+                : MultipartFile.fromFileSync(
+                    formKey.currentState!.value['image'].path,
+                    filename: formKey.currentState!.value['image'].path.split('/').last,
+                  ),
           ),
-        ));
+        );
       }
 
       await ProductRepository.create(data: formData).then(
@@ -72,237 +81,249 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
   Widget build(BuildContext context) {
     return FormBuilder(
       key: formKey,
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              title: Text(
-                'ایجاد محصول',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+      child: Stack(
+        children: [
+          NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  title: Text(
+                    'ایجاد محصول',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                  ),
+                  backgroundColor: Colors.white,
+                  centerTitle: true,
+                  pinned: true,
+                  floating: true,
+                  shape: Border(
+                    bottom: BorderSide(
+                      color: Colors.black12,
+                    ),
+                  ),
+                  elevation: 0,
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.close,
                       color: Theme.of(context).primaryColor,
                     ),
-              ),
-              centerTitle: true,
-              pinned: true,
-              floating: true,
-              snap: true,
-              forceElevated: innerBoxIsScrolled,
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.close,
-                  color: Theme.of(context).primaryColor,
+                  ),
                 ),
-              ),
-            ),
-          ];
-        },
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    FormBuilderField<File>(
-                      builder: (field) {
-                        return InkWell(
-                          onTap: () async {
-                            if (isChoosingImage.value) return;
-                            isChoosingImage.value = true;
-                            FilePickerResult? result = await FilePicker.platform.pickFiles(
-                              type: FileType.image,
-                            );
+              ];
+            },
+            body: SingleChildScrollView(
+              child: Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      FormBuilderField(
+                        builder: (field) {
+                          return InkWell(
+                            onTap: () async {
+                              if (isChoosingImage.value) return;
+                              isChoosingImage.value = true;
+                              FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                type: FileType.image,
+                              );
 
-                            if (result != null) {
-                              field.didChange(File(result.files.single.path!));
-                            }
-                            isChoosingImage.value = false;
-                          },
-                          hoverColor: Colors.transparent,
-                          child: Container(
-                            height: 200,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: 2,
+                              if (result != null) {
+                                var file;
+                                if (!kIsWeb) {
+                                  file = File(result.files.single.path!);
+                                } else {
+                                  file = result.files.single;
+                                }
+
+                                field.didChange(file);
+                              }
+
+                              isChoosingImage.value = false;
+                            },
+                            hoverColor: Colors.transparent,
+                            child: Container(
+                              height: 200,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 2,
+                                ),
                               ),
-                            ),
-                            clipBehavior: Clip.none,
-                            child: Stack(
-                              children: [
-                                field.value != null
-                                    ? Center(
-                                        child: Image.file(
-                                          field.value!,
-                                          fit: BoxFit.cover,
-                                          frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-                                            if (wasSynchronouslyLoaded) {
-                                              return child;
-                                            }
-                                            return AnimatedOpacity(
-                                              opacity: frame == null ? 0 : 1,
-                                              duration: const Duration(seconds: 1),
-                                              curve: Curves.easeOut,
-                                              child: child,
-                                            );
-                                          },
-                                          width: double.maxFinite,
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.add,
-                                              color: Theme.of(context).primaryColor,
-                                              size: 40,
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              'انتخاب تصویر',
-                                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                    color: Theme.of(context).primaryColor,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                ValueListenableBuilder(
-                                  valueListenable: isChoosingImage,
-                                  builder: (context, value, child) {
-                                    if (!value) return const SizedBox();
-                                    return Positioned.fill(
-                                      child: Container(
-                                        color: Colors.black.withOpacity(0.5),
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
+                              clipBehavior: Clip.none,
+                              child: Stack(
+                                children: [
+                                  field.value != null
+                                      ? Center(
+                                          child: kIsWeb
+                                              ? Image.memory(
+                                                  (field.value as PlatformFile).bytes!,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.file(
+                                                  field.value as File,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        )
+                                      : Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.add,
+                                                color: Theme.of(context).primaryColor,
+                                                size: 40,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                'انتخاب تصویر',
+                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                      color: Theme.of(context).primaryColor,
+                                                    ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                  ValueListenableBuilder(
+                                    valueListenable: isChoosingImage,
+                                    builder: (context, value, child) {
+                                      if (!value) return const SizedBox();
+                                      return Positioned.fill(
+                                        child: Container(
+                                          color: Colors.black.withOpacity(0.5),
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      name: 'image',
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    FormBuilderTextField(
-                      name: 'title',
-                      decoration: InputDecoration(
-                        labelText: 'عنوان محصول',
-                        errorText: formKey.currentState?.fields['title']?.errorText,
+                          );
+                        },
+                        name: 'image',
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    FormBuilderDropdown(
-                      name: 'category_id',
-                      decoration: InputDecoration(
-                        labelText: 'دسته بندی',
-                        errorText: formKey.currentState?.fields['title']?.errorText,
+                      const SizedBox(
+                        height: 12,
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                      items: [
-                        for (var category in categories)
-                          DropdownMenuItem(
-                            value: category.id,
-                            child: Text(category.title),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SizedBox(
-                      height: 120, // <-- TextField height
-                      child: FormBuilderTextField(
-                        name: 'description',
-                        maxLines: null,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        textAlignVertical: TextAlignVertical.top,
+                      FormBuilderTextField(
+                        name: 'title',
                         decoration: InputDecoration(
-                          labelText: 'توضیحات محصول',
-                          alignLabelWithHint: true,
+                          labelText: 'عنوان محصول',
                           errorText: formKey.currentState?.fields['title']?.errorText,
                         ),
-                        validator: FormBuilderValidators.compose([]),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    FormBuilderTextField(
-                      name: 'price',
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'قیمت محصول',
-                        suffixText: 'تومان',
-                        errorText: formKey.currentState?.fields['title']?.errorText,
+                      const SizedBox(
+                        height: 12,
                       ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        TextInputFormatter.withFunction((oldValue, newValue) {
-                          try {
-                            // final text = newValue.text;
-                            // if (text.isNotEmpty)
-                            //   newValue = newValue.copyWith(
-                            //     text: NumberFormat.decimalPattern().format(int.parse(text)),
-                            //     selection: TextSelection.collapsed(offset: NumberFormat.decimalPattern().format(int.parse(text)).length),
-                            //     composing: TextRange.empty,
-                            //   );
-                            return newValue;
-                          } catch (e) {
-                            return oldValue;
+                      FormBuilderDropdown(
+                        name: 'category_id',
+                        decoration: InputDecoration(
+                          labelText: 'دسته بندی',
+                          errorText: formKey.currentState?.fields['title']?.errorText,
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
+                        items: [
+                          for (var category in categories)
+                            DropdownMenuItem(
+                              value: category.id,
+                              child: Text(category.title),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      SizedBox(
+                        height: 120, // <-- TextField height
+                        child: FormBuilderTextField(
+                          name: 'description',
+                          maxLines: null,
+                          expands: true,
+                          keyboardType: TextInputType.multiline,
+                          textAlignVertical: TextAlignVertical.top,
+                          decoration: InputDecoration(
+                            labelText: 'توضیحات محصول',
+                            alignLabelWithHint: true,
+                            errorText: formKey.currentState?.fields['title']?.errorText,
+                          ),
+                          validator: FormBuilderValidators.compose([]),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      FormBuilderTextField(
+                        name: 'price',
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: 'قیمت محصول',
+                          suffixText: 'تومان',
+                          errorText: formKey.currentState?.fields['title']?.errorText,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            try {
+                              // final text = newValue.text;
+                              // if (text.isNotEmpty)
+                              //   newValue = newValue.copyWith(
+                              //     text: NumberFormat.decimalPattern().format(int.parse(text)),
+                              //     selection: TextSelection.collapsed(offset: NumberFormat.decimalPattern().format(int.parse(text)).length),
+                              //     composing: TextRange.empty,
+                              //   );
+                              return newValue;
+                            } catch (e) {
+                              return oldValue;
+                            }
+                          }),
+                        ],
+                        textInputAction: TextInputAction.go,
+                        valueTransformer: (value) {
+                          if (value != null) {
+                            return int.parse(value.replaceAll(',', ''));
                           }
-                        }),
-                      ],
-                      textInputAction: TextInputAction.go,
-                      valueTransformer: (value) {
-                        if (value != null) {
-                          return int.parse(value.replaceAll(',', ''));
-                        }
-                      },
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.min(1000),
-                        FormBuilderValidators.numeric(),
-                      ]),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                        },
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.min(1000),
+                          FormBuilderValidators.numeric(),
+                        ]),
+                      ),
+                      const SizedBox(height: 54),
+                    ],
+                  ),
                 ),
               ),
             ),
-            SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ValueListenableBuilder(
-                  valueListenable: isSubmitting,
-                  builder: (context, value, child) {
-                    return PrimaryButton(
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ValueListenableBuilder(
+                valueListenable: isSubmitting,
+                builder: (context, value, child) {
+                  return Expanded(
+                    child: PrimaryButton(
                       onPressed: createProduct,
                       isLoading: isSubmitting.value,
                       child: Padding(
@@ -333,13 +354,13 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
                           ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

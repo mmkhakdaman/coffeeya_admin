@@ -19,9 +19,7 @@ class AuthRepository {
   }
 
   static Future<ResponseModel> logout() async {
-    return await ApiClient.post('/api/admin/auth/logout').then((value) => value..data = null).catchError((error) {
-      return error;
-    });
+    return await ApiClient.post('/api/admin/auth/logout');
   }
 
   static Future<ResponseModel> refresh() async {

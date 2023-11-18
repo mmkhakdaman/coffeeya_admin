@@ -1,6 +1,7 @@
 import 'package:coffeeya_admin/auth/repositories/auth_repository.dart';
 import 'package:coffeeya_admin/core/utils/api_client.dart';
 import 'package:dio/dio.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 
 import 'constant.dart';
@@ -34,9 +35,7 @@ class Token {
   }
 
   static void logout() {
-    AuthRepository.logout().catchError((e) {
-      return e;
-    });
+    AuthRepository.logout();
     removeAccessToken();
   }
 
@@ -60,8 +59,13 @@ class TokenInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      AuthRepository.refresh().then((value) {
-        Token.setAccessToken(value.data!.accessToken!);
+      Dio dio = Dio();
+      dio.options.baseUrl = Constants.baseUrl;
+      dio.options.headers["Authorization"] = "Bearer ${Token.getAccessToken()}";
+      dio.options.headers["Accept"] = "application/json";
+      dio.options.headers["Content-Type"] = "application/json";
+      dio.post('/api/admin/auth/refresh').then((value) {
+        Token.setAccessToken(value.data['access_token']);
 
         ApiClient.dio().request(
           err.requestOptions.path,
@@ -72,6 +76,7 @@ class TokenInterceptor extends Interceptor {
         );
       }).catchError((error) {
         Token.logout();
+        Global.context?.goNamed('auth');
       });
     }
 

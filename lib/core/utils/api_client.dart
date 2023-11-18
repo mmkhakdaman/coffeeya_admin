@@ -11,7 +11,6 @@ class ApiClient {
     dio.options.baseUrl = Constants.baseUrl;
     dio.options.headers = {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
     };
 
     dio.interceptors.add(TokenInterceptor());
