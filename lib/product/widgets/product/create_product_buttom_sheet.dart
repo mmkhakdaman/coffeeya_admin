@@ -320,37 +320,35 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
               child: ValueListenableBuilder(
                 valueListenable: isSubmitting,
                 builder: (context, value, child) {
-                  return Expanded(
-                    child: PrimaryButton(
-                      onPressed: createProduct,
-                      isLoading: isSubmitting.value,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'ذخیره',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            if (isSubmitting.value) ...[
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: 15,
-                                height: 15,
-                                child: CircularProgressIndicator(
+                  return PrimaryButton(
+                    onPressed: createProduct,
+                    isLoading: isSubmitting.value,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'ذخیره',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   color: Colors.white,
                                 ),
+                          ),
+                          if (isSubmitting.value) ...[
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
                               ),
-                            ],
+                            ),
                           ],
-                        ),
+                        ],
                       ),
                     ),
                   );
