@@ -116,199 +116,197 @@ class _CreateProductButtomSheetState extends State<CreateProductButtomSheet> {
               ];
             },
             body: SingleChildScrollView(
-              child: Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      FormBuilderField(
-                        builder: (field) {
-                          return InkWell(
-                            onTap: () async {
-                              if (isChoosingImage.value) return;
-                              isChoosingImage.value = true;
-                              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                type: FileType.image,
-                              );
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    FormBuilderField(
+                      builder: (field) {
+                        return InkWell(
+                          onTap: () async {
+                            if (isChoosingImage.value) return;
+                            isChoosingImage.value = true;
+                            FilePickerResult? result = await FilePicker.platform.pickFiles(
+                              type: FileType.image,
+                            );
 
-                              if (result != null) {
-                                var file;
-                                if (!kIsWeb) {
-                                  file = File(result.files.single.path!);
-                                } else {
-                                  file = result.files.single;
-                                }
-
-                                field.didChange(file);
+                            if (result != null) {
+                              var file;
+                              if (!kIsWeb) {
+                                file = File(result.files.single.path!);
+                              } else {
+                                file = result.files.single;
                               }
 
-                              isChoosingImage.value = false;
-                            },
-                            hoverColor: Colors.transparent,
-                            child: Container(
-                              height: 200,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2,
-                                ),
-                              ),
-                              clipBehavior: Clip.none,
-                              child: Stack(
-                                children: [
-                                  field.value != null
-                                      ? Center(
-                                          child: kIsWeb
-                                              ? Image.memory(
-                                                  (field.value as PlatformFile).bytes!,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.file(
-                                                  field.value as File,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                        )
-                                      : Center(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.add,
-                                                color: Theme.of(context).primaryColor,
-                                                size: 40,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                'انتخاب تصویر',
-                                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                                      color: Theme.of(context).primaryColor,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                  ValueListenableBuilder(
-                                    valueListenable: isChoosingImage,
-                                    builder: (context, value, child) {
-                                      if (!value) return const SizedBox();
-                                      return Positioned.fill(
-                                        child: Container(
-                                          color: Colors.black.withOpacity(0.5),
-                                          child: Center(
-                                            child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        name: 'image',
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      FormBuilderTextField(
-                        name: 'title',
-                        decoration: InputDecoration(
-                          labelText: 'عنوان محصول',
-                          errorText: formKey.currentState?.fields['title']?.errorText,
-                        ),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                        ]),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      FormBuilderDropdown(
-                        name: 'category_id',
-                        decoration: InputDecoration(
-                          labelText: 'دسته بندی',
-                          errorText: formKey.currentState?.fields['title']?.errorText,
-                        ),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                        ]),
-                        items: [
-                          for (var category in categories)
-                            DropdownMenuItem(
-                              value: category.id,
-                              child: Text(category.title),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      SizedBox(
-                        height: 120, // <-- TextField height
-                        child: FormBuilderTextField(
-                          name: 'description',
-                          maxLines: null,
-                          expands: true,
-                          keyboardType: TextInputType.multiline,
-                          textAlignVertical: TextAlignVertical.top,
-                          decoration: InputDecoration(
-                            labelText: 'توضیحات محصول',
-                            alignLabelWithHint: true,
-                            errorText: formKey.currentState?.fields['title']?.errorText,
-                          ),
-                          validator: FormBuilderValidators.compose([]),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      FormBuilderTextField(
-                        name: 'price',
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'قیمت محصول',
-                          suffixText: 'تومان',
-                          errorText: formKey.currentState?.fields['title']?.errorText,
-                        ),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          TextInputFormatter.withFunction((oldValue, newValue) {
-                            try {
-                              // final text = newValue.text;
-                              // if (text.isNotEmpty)
-                              //   newValue = newValue.copyWith(
-                              //     text: NumberFormat.decimalPattern().format(int.parse(text)),
-                              //     selection: TextSelection.collapsed(offset: NumberFormat.decimalPattern().format(int.parse(text)).length),
-                              //     composing: TextRange.empty,
-                              //   );
-                              return newValue;
-                            } catch (e) {
-                              return oldValue;
+                              field.didChange(file);
                             }
-                          }),
-                        ],
-                        textInputAction: TextInputAction.go,
-                        valueTransformer: (value) {
-                          if (value != null) {
-                            return int.parse(value.replaceAll(',', ''));
-                          }
-                        },
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                          FormBuilderValidators.min(1000),
-                          FormBuilderValidators.numeric(),
-                        ]),
+
+                            isChoosingImage.value = false;
+                          },
+                          hoverColor: Colors.transparent,
+                          child: Container(
+                            height: 200,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 2,
+                              ),
+                            ),
+                            clipBehavior: Clip.none,
+                            child: Stack(
+                              children: [
+                                field.value != null
+                                    ? Center(
+                                        child: kIsWeb
+                                            ? Image.memory(
+                                                (field.value as PlatformFile).bytes!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.file(
+                                                field.value as File,
+                                                fit: BoxFit.cover,
+                                              ),
+                                      )
+                                    : Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.add,
+                                              color: Theme.of(context).primaryColor,
+                                              size: 40,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'انتخاب تصویر',
+                                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                                    color: Theme.of(context).primaryColor,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                ValueListenableBuilder(
+                                  valueListenable: isChoosingImage,
+                                  builder: (context, value, child) {
+                                    if (!value) return const SizedBox();
+                                    return Positioned.fill(
+                                      child: Container(
+                                        color: Colors.black.withOpacity(0.5),
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      name: 'image',
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    FormBuilderTextField(
+                      name: 'title',
+                      decoration: InputDecoration(
+                        labelText: 'عنوان محصول',
+                        errorText: formKey.currentState?.fields['title']?.errorText,
                       ),
-                      const SizedBox(height: 54),
-                    ],
-                  ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    FormBuilderDropdown(
+                      name: 'category_id',
+                      decoration: InputDecoration(
+                        labelText: 'دسته بندی',
+                        errorText: formKey.currentState?.fields['title']?.errorText,
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      items: [
+                        for (var category in categories)
+                          DropdownMenuItem(
+                            value: category.id,
+                            child: Text(category.title),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    SizedBox(
+                      height: 120, // <-- TextField height
+                      child: FormBuilderTextField(
+                        name: 'description',
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        textAlignVertical: TextAlignVertical.top,
+                        decoration: InputDecoration(
+                          labelText: 'توضیحات محصول',
+                          alignLabelWithHint: true,
+                          errorText: formKey.currentState?.fields['title']?.errorText,
+                        ),
+                        validator: FormBuilderValidators.compose([]),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    FormBuilderTextField(
+                      name: 'price',
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'قیمت محصول',
+                        suffixText: 'تومان',
+                        errorText: formKey.currentState?.fields['title']?.errorText,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          try {
+                            // final text = newValue.text;
+                            // if (text.isNotEmpty)
+                            //   newValue = newValue.copyWith(
+                            //     text: NumberFormat.decimalPattern().format(int.parse(text)),
+                            //     selection: TextSelection.collapsed(offset: NumberFormat.decimalPattern().format(int.parse(text)).length),
+                            //     composing: TextRange.empty,
+                            //   );
+                            return newValue;
+                          } catch (e) {
+                            return oldValue;
+                          }
+                        }),
+                      ],
+                      textInputAction: TextInputAction.go,
+                      valueTransformer: (value) {
+                        if (value != null) {
+                          return int.parse(value.replaceAll(',', ''));
+                        }
+                      },
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.min(1000),
+                        FormBuilderValidators.numeric(),
+                      ]),
+                    ),
+                    const SizedBox(height: 54),
+                  ],
                 ),
               ),
             ),
