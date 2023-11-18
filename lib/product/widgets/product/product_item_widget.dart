@@ -1,10 +1,10 @@
+import 'package:coffeeya_admin/core/helpers/number.dart';
 import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
 import 'package:coffeeya_admin/product/models/product_model.dart';
 import 'package:coffeeya_admin/product/repositories/product_repository.dart';
 import 'package:coffeeya_admin/product/screens/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class ProductItemWidget extends StatefulWidget {
   const ProductItemWidget({super.key, required this.product});
@@ -191,12 +191,15 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          NumberFormat.decimalPattern().format(widget.product.price),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
+                        Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: Text(
+                            priceFormatter(widget.product.price.toDouble()),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 4),
