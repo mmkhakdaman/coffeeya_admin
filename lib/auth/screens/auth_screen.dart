@@ -106,7 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                     onChanged: (TenantModel? data) {
-                      Constants.setBaseUrl("http://${data!.domain!.domain!}/");
+                      Constants.setBaseUrl("https://${data!.domain!.domain!}/");
                     },
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(),
