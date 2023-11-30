@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:coffeeya_admin/core/config/constant.dart';
-import 'package:coffeeya_admin/core/config/token.dart';
-import 'package:coffeeya_admin/core/models/response_model.dart';
+import 'package:coffeeya/core/config/constant.dart';
+import 'package:coffeeya/core/config/token.dart';
+import 'package:coffeeya/core/models/response_model.dart';
 import 'package:dio/dio.dart';
 
 class ApiClient {

@@ -1,4 +1,4 @@
-import 'package:coffeeya_admin/core/models/error.dart';
+import 'package:coffeeya/core/models/error.dart';
 
 class ResponseModel<T> {
   final int statusCode;

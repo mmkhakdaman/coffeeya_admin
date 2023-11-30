@@ -1,6 +1,6 @@
-import 'package:coffeeya_admin/core/models/response_model.dart';
-import 'package:coffeeya_admin/core/utils/api_client.dart';
-import 'package:coffeeya_admin/product/models/category_model.dart';
+import 'package:coffeeya/core/models/response_model.dart';
+import 'package:coffeeya/core/utils/api_client.dart';
+import 'package:coffeeya/product/models/category_model.dart';
 
 class CategoryRepository {
   static Future<ResponseModel> categories() async {

@@ -1,8 +1,8 @@
-import 'package:coffeeya_admin/core/helpers/number.dart';
-import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
-import 'package:coffeeya_admin/product/models/product_model.dart';
-import 'package:coffeeya_admin/product/repositories/product_repository.dart';
-import 'package:coffeeya_admin/product/screens/edit_product_screen.dart';
+import 'package:coffeeya/core/helpers/number.dart';
+import 'package:coffeeya/product/blocs/category_bloc.dart';
+import 'package:coffeeya/product/models/product_model.dart';
+import 'package:coffeeya/product/repositories/product_repository.dart';
+import 'package:coffeeya/product/screens/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

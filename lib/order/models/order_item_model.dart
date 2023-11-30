@@ -1,5 +1,5 @@
-import 'package:coffeeya_admin/product/models/product_model.dart';
-import 'package:coffeeya_admin/share/models/customer.dart';
+import 'package:coffeeya/product/models/product_model.dart';
+import 'package:coffeeya/share/models/customer.dart';
 
 class OrderItemModel {
   int? id;

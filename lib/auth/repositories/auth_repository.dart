@@ -1,6 +1,6 @@
-import 'package:coffeeya_admin/auth/models/auth.dart';
-import 'package:coffeeya_admin/core/models/response_model.dart';
-import 'package:coffeeya_admin/core/utils/api_client.dart';
+import 'package:coffeeya/auth/models/auth.dart';
+import 'package:coffeeya/core/models/response_model.dart';
+import 'package:coffeeya/core/utils/api_client.dart';
 
 class AuthRepository {
   static Future<ResponseModel> login({

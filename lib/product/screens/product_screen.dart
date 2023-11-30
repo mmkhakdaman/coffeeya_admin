@@ -1,8 +1,8 @@
-import 'package:coffeeya_admin/core/layout/home/context.dart';
-import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
-import 'package:coffeeya_admin/product/widgets/category/category_list_widget.dart';
-import 'package:coffeeya_admin/product/widgets/product/create_product_buttom_sheet.dart';
-import 'package:coffeeya_admin/product/widgets/product/product_item_widget.dart';
+import 'package:coffeeya/core/layout/home/context.dart';
+import 'package:coffeeya/product/blocs/category_bloc.dart';
+import 'package:coffeeya/product/widgets/category/category_list_widget.dart';
+import 'package:coffeeya/product/widgets/product/create_product_buttom_sheet.dart';
+import 'package:coffeeya/product/widgets/product/product_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

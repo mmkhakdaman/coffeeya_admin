@@ -1,9 +1,9 @@
-import 'package:coffeeya_admin/core/models/error.dart';
-import 'package:coffeeya_admin/core/models/response_model.dart';
-import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
-import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
-import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
-import 'package:coffeeya_admin/product/repositories/category_repository.dart';
+import 'package:coffeeya/core/models/error.dart';
+import 'package:coffeeya/core/models/response_model.dart';
+import 'package:coffeeya/core/widgets/buttons/default_button.dart';
+import 'package:coffeeya/core/widgets/buttons/primary_button.dart';
+import 'package:coffeeya/product/blocs/category_bloc.dart';
+import 'package:coffeeya/product/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

@@ -1,5 +1,5 @@
-import 'package:coffeeya_admin/core/config/constant.dart';
-import 'package:coffeeya_admin/core/widgets/notification/toast.dart';
+import 'package:coffeeya/core/config/constant.dart';
+import 'package:coffeeya/core/widgets/notification/toast.dart';
 import 'package:flutter/material.dart';
 
 class NotificationNotify extends ChangeNotifier {

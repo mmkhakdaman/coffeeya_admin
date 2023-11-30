@@ -1,4 +1,4 @@
-import 'package:coffeeya_admin/core/models/domain_model.dart';
+import 'package:coffeeya/core/models/domain_model.dart';
 
 class TenantModel {
   String id;

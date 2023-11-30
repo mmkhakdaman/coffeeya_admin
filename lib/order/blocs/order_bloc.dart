@@ -1,5 +1,5 @@
-import 'package:coffeeya_admin/order/models/order_model.dart';
-import 'package:coffeeya_admin/order/repositories/order_repository.dart';
+import 'package:coffeeya/order/models/order_model.dart';
+import 'package:coffeeya/order/repositories/order_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderState {

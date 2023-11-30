@@ -1,6 +1,6 @@
-import 'package:coffeeya_admin/core/config/color.dart';
-import 'package:coffeeya_admin/core/config/token.dart';
-import 'package:coffeeya_admin/core/layout/home/context.dart';
+import 'package:coffeeya/core/config/color.dart';
+import 'package:coffeeya/core/config/token.dart';
+import 'package:coffeeya/core/layout/home/context.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';

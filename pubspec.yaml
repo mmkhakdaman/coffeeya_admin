@@ -1,4 +1,4 @@
-name: coffeeya_admin
+name: coffeeya
 description: پنل ادمین کافیا
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -48,6 +48,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   shamsi_date: ^1.0.2
   file_picker: ^6.1.1
+  flutter_native_splash: ^2.3.6
   # intl: 0.18.1
 
 dev_dependencies:

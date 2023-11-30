@@ -1,8 +1,6 @@
-import 'dart:developer';
-
-import 'package:coffeeya_admin/core/models/response_model.dart';
-import 'package:coffeeya_admin/core/utils/api_client.dart';
-import 'package:coffeeya_admin/order/models/order_model.dart';
+import 'package:coffeeya/core/models/response_model.dart';
+import 'package:coffeeya/core/utils/api_client.dart';
+import 'package:coffeeya/order/models/order_model.dart';
 
 class OrderRepository {
   static Future<ResponseModel> orders({

@@ -1,6 +1,6 @@
-import 'package:coffeeya_admin/product/models/category_model.dart';
-import 'package:coffeeya_admin/product/models/product_model.dart';
-import 'package:coffeeya_admin/product/repositories/category_repository.dart';
+import 'package:coffeeya/product/models/category_model.dart';
+import 'package:coffeeya/product/models/product_model.dart';
+import 'package:coffeeya/product/repositories/category_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryState {

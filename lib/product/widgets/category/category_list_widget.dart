@@ -1,6 +1,6 @@
-import 'package:coffeeya_admin/product/blocs/category_bloc.dart';
-import 'package:coffeeya_admin/product/widgets/category/create_category_dialog.dart';
-import 'package:coffeeya_admin/product/widgets/category/edit_categorie_buttom_sheet.dart';
+import 'package:coffeeya/product/blocs/category_bloc.dart';
+import 'package:coffeeya/product/widgets/category/create_category_dialog.dart';
+import 'package:coffeeya/product/widgets/category/edit_categorie_buttom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

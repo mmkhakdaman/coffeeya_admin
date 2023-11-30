@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:coffeeya_admin/core/models/response_model.dart';
-import 'package:coffeeya_admin/core/utils/api_client.dart';
-import 'package:coffeeya_admin/product/models/product_model.dart';
+import 'package:coffeeya/core/models/response_model.dart';
+import 'package:coffeeya/core/utils/api_client.dart';
+import 'package:coffeeya/product/models/product_model.dart';
 import 'package:dio/dio.dart';
 
 class ProductRepository {

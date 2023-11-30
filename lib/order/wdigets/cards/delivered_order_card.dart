@@ -1,9 +1,9 @@
-import 'package:coffeeya_admin/core/config/color.dart';
-import 'package:coffeeya_admin/core/widgets/buttons/default_button.dart';
-import 'package:coffeeya_admin/core/widgets/buttons/primary_button.dart';
-import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
-import 'package:coffeeya_admin/order/models/order_item_model.dart';
-import 'package:coffeeya_admin/order/models/order_model.dart';
+import 'package:coffeeya/core/config/color.dart';
+import 'package:coffeeya/core/widgets/buttons/default_button.dart';
+import 'package:coffeeya/core/widgets/buttons/primary_button.dart';
+import 'package:coffeeya/order/blocs/order_bloc.dart';
+import 'package:coffeeya/order/models/order_item_model.dart';
+import 'package:coffeeya/order/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

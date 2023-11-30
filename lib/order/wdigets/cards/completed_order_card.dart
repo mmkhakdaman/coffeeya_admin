@@ -1,6 +1,6 @@
-import 'package:coffeeya_admin/core/config/color.dart';
-import 'package:coffeeya_admin/order/models/order_item_model.dart';
-import 'package:coffeeya_admin/order/models/order_model.dart';
+import 'package:coffeeya/core/config/color.dart';
+import 'package:coffeeya/order/models/order_item_model.dart';
+import 'package:coffeeya/order/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

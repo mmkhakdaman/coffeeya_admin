@@ -1,4 +1,4 @@
-import 'package:coffeeya_admin/core/config/token.dart';
+import 'package:coffeeya/core/config/token.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';

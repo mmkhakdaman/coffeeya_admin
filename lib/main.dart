@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:coffeeya_admin/auth/screens/auth_screen.dart';
-import 'package:coffeeya_admin/core/config/token.dart';
-import 'package:coffeeya_admin/home/screens/home_screen.dart';
+import 'package:coffeeya/auth/screens/auth_screen.dart';
+import 'package:coffeeya/core/config/token.dart';
+import 'package:coffeeya/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';

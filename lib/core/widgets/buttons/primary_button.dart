@@ -1,4 +1,4 @@
-import 'package:coffeeya_admin/core/config/color.dart';
+import 'package:coffeeya/core/config/color.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:coffeeya_admin/product/models/product_model.dart';
+import 'package:coffeeya/product/models/product_model.dart';
 
 class CategoryModel {
   final int id;

@@ -1,10 +1,10 @@
-import 'package:coffeeya_admin/core/config/color.dart';
-import 'package:coffeeya_admin/core/layout/home/context.dart';
-import 'package:coffeeya_admin/order/blocs/order_bloc.dart';
-import 'package:coffeeya_admin/order/wdigets/tabs/completed_tab.dart';
-import 'package:coffeeya_admin/order/wdigets/tabs/confirmed_tab.dart';
-import 'package:coffeeya_admin/order/wdigets/tabs/delivered_tab.dart';
-import 'package:coffeeya_admin/order/wdigets/tabs/pending_tab.dart';
+import 'package:coffeeya/core/config/color.dart';
+import 'package:coffeeya/core/layout/home/context.dart';
+import 'package:coffeeya/order/blocs/order_bloc.dart';
+import 'package:coffeeya/order/wdigets/tabs/completed_tab.dart';
+import 'package:coffeeya/order/wdigets/tabs/confirmed_tab.dart';
+import 'package:coffeeya/order/wdigets/tabs/delivered_tab.dart';
+import 'package:coffeeya/order/wdigets/tabs/pending_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
