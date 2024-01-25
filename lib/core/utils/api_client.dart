@@ -46,6 +46,10 @@ class ApiClient {
       data['_method'] = 'PUT';
     }
 
+    if (data == null) {
+      data = {'_method': 'PUT'};
+    }
+
     return dio()
         .post(
       endpoint,

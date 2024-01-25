@@ -84,7 +84,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         List<TenantModel> teants = [];
                         Dio().close();
                         final response = await Dio().get(
-                          "https://api.coffeeya.ir/api/tenant/search",
+                          "https://api.apicoffeeya.ir/api/tenant/search",
                           queryParameters: {"name": filter},
                         );
                         if (response.statusCode == 200) {

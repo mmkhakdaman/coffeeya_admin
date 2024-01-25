@@ -23,7 +23,7 @@ class ProductScreen extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height,
+                  maxHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 56,
                 ),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
